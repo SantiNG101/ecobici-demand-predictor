@@ -1,0 +1,8 @@
+# Notebook 01_adquisicion
+pandas>=2.0
+duckdb>=1.1
+pyarrow>=14
+requests>=2.31
+
+# Para abrir y ejecutar los notebooks
+jupyter
