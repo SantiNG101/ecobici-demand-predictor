@@ -1,0 +1,12 @@
+# Datos: los crudos viven fuera del repo y los intermedios se regeneran con los notebooks
+data/interim/
+data/processed/
+datasets/
+__MACOSX/
+*:Zone.Identifier
+
+# Entornos y cachés de Python / Jupyter
+.venv/
+venv/
+__pycache__/
+.ipynb_checkpoints/
