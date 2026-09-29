@@ -1,8 +1,19 @@
-# Notebook 01_adquisicion
-pandas>=2.0
+# Versiones con las que se ejecutaron los notebooks (Python 3.11–3.13)
+pandas==2.3.3
+numpy>=1.26,<3
 duckdb>=1.1
 pyarrow>=14
 requests>=2.31
+
+# Notebook 02 (EDA y calidad)
+matplotlib>=3.8
+seaborn>=0.13
+missingno>=0.5
+folium>=0.17
+holidays>=0.50
+
+# Notebook 03 (transformaciones)
+scikit-learn>=1.4
 
 # Para abrir y ejecutar los notebooks
 jupyter
