@@ -1,8 +1,21 @@
-# Notebook 01_adquisicion
+# Datos (los tres notebooks)
 pandas>=2.0
+numpy
 duckdb>=1.1
 pyarrow>=14
 requests>=2.31
+
+# Gráficos y EDA (02, 03)
+matplotlib
+seaborn
+missingno
+folium
+
+# Calendario (02)
+holidays
+
+# Normalización (03)
+scikit-learn
 
 # Para abrir y ejecutar los notebooks
 jupyter
