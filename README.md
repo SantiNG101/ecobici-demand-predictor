@@ -9,16 +9,15 @@ Ciencia de Datos Aplicada (ITBA) · Segundo entregable: *Recopilación y prepara
 
 ```
 datasets/
-├── buenos-aires.zip                     # fotos del feed GBFS y pronósticos (o ya descomprimido como archive/)
-└── ba-ecobici-datasets/
-    ├── recorridos-realizados-2024.zip   # viajes de BA Data, un ZIP por año
-    ├── recorridos-realizados-2025.zip
-    ├── recorridos-realizados-2026.zip
-    ├── ciclovias.csv
-    └── usuarios_ecobici_AAAA.csv        # no se usan en los notebooks
+├── archive/
+│   ├── stations/buenos-aires/ecobici/2024, 2025, 2026/   # fotos del feed GBFS (parquet mensuales)
+│   └── weather/buenos-aires/2024, 2025, 2026/            # pronósticos de clima (parquet mensuales)
+└── ba_data/
+    ├── recorridos-realizados-AAAA/                       # viajes de BA Data, un CSV por año (2024, 2025, 2026)
+    └── ciclovias.csv
 ```
 
-No hace falta descomprimir los ZIP de adentro: el notebook 01 lo hace la primera vez que se corre (unos 2 GB en disco) y las siguientes corridas reutilizan lo extraído. Si los datos están en otra carpeta, se puede indicar con la variable de entorno `ECOBICI_DATA_DIR`.
+Si los viajes de algún año vienen como `recorridos-realizados-AAAA.zip`, no hace falta descomprimirlos: el notebook 01 lo hace la primera vez que se corre (unos 2 GB en disco) y las siguientes corridas reutilizan lo extraído. Si los datos están en otra carpeta, se puede indicar con la variable de entorno `ECOBICI_DATA_DIR`.
 
 ## Instalación
 
