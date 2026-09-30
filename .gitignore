@@ -4,6 +4,7 @@ data/processed/
 datasets
 __MACOSX/
 *:Zone.Identifier
+docs
 
 # Entornos y cachés de Python / Jupyter
 .venv/
