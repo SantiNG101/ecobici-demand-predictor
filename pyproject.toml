@@ -1,0 +1,29 @@
+[project]
+name = "ecobici-demand-predictor"
+version = "0.1.0"
+description = "Modelo predictivo de demanda de Ecobici (CABA): adquisición, EDA y transformaciones"
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    # Datos (los tres notebooks). pandas fijado: es la versión con la que se ejecutaron los notebooks
+    "pandas==2.3.3",
+    "numpy>=1.26,<3",
+    "duckdb>=1.1",
+    "pyarrow>=14",
+    "requests>=2.31",
+    # Gráficos y EDA (02, 03)
+    "matplotlib>=3.8",
+    "seaborn>=0.13",
+    "missingno>=0.5",
+    "folium>=0.17",
+    # Calendario (02)
+    "holidays>=0.50",
+    # Normalización (03)
+    "scikit-learn>=1.4",
+    # Para abrir y ejecutar los notebooks
+    "jupyter",
+]
+
+[tool.uv]
+# Es un proyecto de notebooks, no un paquete instalable
+package = false
