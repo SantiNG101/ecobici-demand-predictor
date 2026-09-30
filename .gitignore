@@ -1,7 +1,7 @@
 # Datos: los crudos viven fuera del repo y los intermedios se regeneran con los notebooks
 data/interim/
 data/processed/
-datasets/
+datasets
 __MACOSX/
 *:Zone.Identifier
 
@@ -10,3 +10,6 @@ __MACOSX/
 venv/
 __pycache__/
 .ipynb_checkpoints/
+
+# Salidas generadas por los notebooks
+notebooks/mapa_retiros.html
