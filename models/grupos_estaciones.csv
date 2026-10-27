@@ -1,0 +1,405 @@
+station_id,grupo,nombre_grupo,nombre
+2,2,Residencial (origen a la mañana),002 - Retiro I
+3,3,Centro (destino a la mañana),003 - ADUANA
+4,1,Polos de trabajo y estudio,004 - Plaza Roma
+5,0,Uso de tarde,005 - Plaza Italia
+6,0,Uso de tarde,006 - Parque Lezama
+7,1,Polos de trabajo y estudio,007 - OBELISCO
+8,2,Residencial (origen a la mañana),008 - Congreso
+9,0,Uso de tarde,009 - Parque Las Heras
+12,1,Polos de trabajo y estudio,012 - Plaza Vicente Lopez
+13,2,Residencial (origen a la mañana),013 - ONCE
+14,2,Residencial (origen a la mañana),014 - Pacifico
+17,2,Residencial (origen a la mañana),017 - Plaza Almagro
+21,0,Uso de tarde,021 - Parque Patricios
+22,3,Centro (destino a la mañana),022 - Arenales
+24,3,Centro (destino a la mañana),024 - ALSINA
+25,2,Residencial (origen a la mañana),025 - Plaza Guemes
+26,3,Centro (destino a la mañana),026 - JUANA MANSO I
+27,1,Polos de trabajo y estudio,027 - Montevideo
+29,0,Uso de tarde,029 - Parque Centenario
+32,3,Centro (destino a la mañana),032 - Catedral
+33,3,Centro (destino a la mañana),033 - Facultad de Medicina
+35,3,Centro (destino a la mañana),035 - INGENIERO BUTTY
+36,3,Centro (destino a la mañana),036 - MAIPÚ
+38,3,Centro (destino a la mañana),038 - Plaza Libertad
+41,0,Uso de tarde,041 - PARQUE PATRICIOS II
+43,0,Uso de tarde,334 - CENTRO DE EXPOSICIONES
+44,1,Polos de trabajo y estudio,044 - Ecoparque
+45,3,Centro (destino a la mañana),045 - Uruguay
+46,1,Polos de trabajo y estudio,046 - Chile
+48,1,Polos de trabajo y estudio,034 - Colonia Express
+49,0,Uso de tarde,049 - 33 Orientales
+50,2,Residencial (origen a la mañana),050 - Hospital Rivadavia
+54,2,Residencial (origen a la mañana),054 - Acuña de Figueroa
+56,2,Residencial (origen a la mañana),056 - Plaza Palermo Viejo
+57,3,Centro (destino a la mañana),057 - BELGRANO
+58,2,Residencial (origen a la mañana),058 - Ministro Carranza
+59,2,Residencial (origen a la mañana),018 - Independencia
+60,3,Centro (destino a la mañana),060 - 25 De Mayo
+61,0,Uso de tarde,098 - BENITO JUAREZ
+63,3,Centro (destino a la mañana),063 - Reconquista
+64,2,Residencial (origen a la mañana),064 - RIOBAMBA
+65,2,Residencial (origen a la mañana),065 - Julián Álvarez
+66,2,Residencial (origen a la mañana),066 - Billinghurst
+68,0,Uso de tarde,105 - PARQUE SAAVEDRA
+69,2,Residencial (origen a la mañana),069 - Ecuador
+70,2,Residencial (origen a la mañana),070 - ARAOZ
+71,3,Centro (destino a la mañana),071 - CERRITO
+73,2,Residencial (origen a la mañana),073 - Ruy Díaz de Guzmán
+74,2,Residencial (origen a la mañana),074 - INSTITUTO LELOIR
+75,2,Residencial (origen a la mañana),075 - Plaza Primero de Mayo
+76,2,Residencial (origen a la mañana),076 - Ayacucho
+77,2,Residencial (origen a la mañana),109 - ESTACION PUEYRREDON
+79,1,Polos de trabajo y estudio,079 - AZUCENA VILLAFLOR
+80,0,Uso de tarde,080 - VALLE
+82,1,Polos de trabajo y estudio,082 - HOSPITAL ITALIANO
+83,3,Centro (destino a la mañana),083 - Paraná
+85,2,Residencial (origen a la mañana),085 - AGUERO
+86,2,Residencial (origen a la mañana),086 - SAAVEDRA
+87,2,Residencial (origen a la mañana),087 - Guayaquil
+89,2,Residencial (origen a la mañana),089 - Cabello
+91,2,Residencial (origen a la mañana),091 - Pasco
+92,2,Residencial (origen a la mañana),092 - Salcedo
+93,2,Residencial (origen a la mañana),093 - CARLOS CALVO
+94,2,Residencial (origen a la mañana),094 - GÚZMAN
+96,2,Residencial (origen a la mañana),096 - Carlos Gardel
+98,3,Centro (destino a la mañana),037- Claudia Pía Baudracco
+99,2,Residencial (origen a la mañana),099 - Malabia
+101,1,Polos de trabajo y estudio,101 - Fitz Roy
+102,2,Residencial (origen a la mañana),102 - ROSETI
+104,2,Residencial (origen a la mañana),104 - Federico Lacroze
+107,2,Residencial (origen a la mañana),107 - HOSPITAL GARRAHAN
+111,3,Centro (destino a la mañana),111 - MACACHA GUEMES
+112,3,Centro (destino a la mañana),112 - 9 de Julio
+114,3,Centro (destino a la mañana),114 - TORRE MACRO
+116,2,Residencial (origen a la mañana),116 - HOSPITAL ALEMÁN
+117,2,Residencial (origen a la mañana),117 - HUMBERTO 1°
+118,2,Residencial (origen a la mañana),118 - MEXICO
+120,2,Residencial (origen a la mañana),120 - HOSPITAL RAMOS MEJIA
+121,2,Residencial (origen a la mañana),121 - YATAY
+122,2,Residencial (origen a la mañana),122 - COSTA RICA
+124,2,Residencial (origen a la mañana),124 - UGARTECHE
+126,2,Residencial (origen a la mañana),126 - Ministerio de Justicia y Seguridad
+128,1,Polos de trabajo y estudio,128 - PARQUE DEL BAJO
+130,2,Residencial (origen a la mañana),130 - RETIRO II
+131,1,Polos de trabajo y estudio,131- HOSPITAL DE CLÍNICAS
+132,3,Centro (destino a la mañana),132 - CORRIENTES
+134,0,Uso de tarde,134 - SOLDADO DE LA FRONTERA
+135,3,Centro (destino a la mañana),135 - MARCELO T. DE ALVEAR
+137,3,Centro (destino a la mañana),137 - AZOPARDO Y CHILE
+138,1,Polos de trabajo y estudio,138 - Hospital Britanico
+144,2,Residencial (origen a la mañana),144 - PUEYRREDÓN
+146,2,Residencial (origen a la mañana),146 - Hospital Francés
+148,0,Uso de tarde,323 - Parque Avellaneda II
+149,3,Centro (destino a la mañana),149 - LIMA
+150,2,Residencial (origen a la mañana),150 - RODRIGO BUENO
+151,0,Uso de tarde,151 - AIME PAINÉ
+152,1,Polos de trabajo y estudio,152 - JULIETA LANTERI
+153,2,Residencial (origen a la mañana),153 - JUAN MANUEL DE BLANES
+155,0,Uso de tarde,155 - Parque José Evaristo Uriburu
+156,1,Polos de trabajo y estudio,156 - Plaza Alemania
+158,2,Residencial (origen a la mañana),158 - VILLARROEL
+161,0,Uso de tarde,161 - Humahuaca
+162,1,Polos de trabajo y estudio,162 - LARREA Y BARTOLOMÉ MITRE
+163,2,Residencial (origen a la mañana),163 - ONCE II
+164,1,Polos de trabajo y estudio,164 - FACULTAD DE INGENIERIA
+165,2,Residencial (origen a la mañana),165 - PLAZA MONSEÑOR MIGUEL DE ANDREA
+166,2,Residencial (origen a la mañana),166 - Cementerio de Recoleta
+167,2,Residencial (origen a la mañana),275 - PLAZA 24 DE SEPTIEMBRE
+168,2,Residencial (origen a la mañana),168 - Estados Unidos
+169,2,Residencial (origen a la mañana),169 - FACULTAD DE PSICOLOGIA
+171,3,Centro (destino a la mañana),171 - Pasteur
+172,2,Residencial (origen a la mañana),172 - BRASIL
+174,1,Polos de trabajo y estudio,174 - MINISTERIO DE EDUCACION
+175,2,Residencial (origen a la mañana),147 - Constitución
+176,0,Uso de tarde,067 - PARQUE SARMIENTO I
+177,0,Uso de tarde,177 -PLANETARIO
+179,0,Uso de tarde,179 - CASA SAN
+181,2,Residencial (origen a la mañana),181 - BILLINGHURST Y MANSILLA
+182,2,Residencial (origen a la mañana),182 - RAVIGNANI Y GUATEMALA
+183,2,Residencial (origen a la mañana),183 - VIRREY CEVALLOS
+184,1,Polos de trabajo y estudio,184 - Pedro Echague
+186,2,Residencial (origen a la mañana),186 - MANZANA 66
+187,1,Polos de trabajo y estudio,261 - QUINTEROS LIDORO
+188,2,Residencial (origen a la mañana),373 - Jorgelina De Simone
+189,1,Polos de trabajo y estudio,189 - POSADAS
+190,2,Residencial (origen a la mañana),190 - JUNCAL
+191,1,Polos de trabajo y estudio,191 - Rivadavia y 9 de Julio
+193,2,Residencial (origen a la mañana),193 - ARENALES Y AGUERO
+194,2,Residencial (origen a la mañana),194 - PERÓN Y ACUÑA DE FIGUEROA
+196,2,Residencial (origen a la mañana),196 - HOSPITAL ARGERICH
+197,0,Uso de tarde,197 - PLAZA CIUDAD DE UDINE
+199,2,Residencial (origen a la mañana),199 - ESTADOS UNIDOS Y BOEDO
+200,2,Residencial (origen a la mañana),200 - AUSTRIA Y FRENCH
+202,0,Uso de tarde,001 - FACULTAD DE DERECHO
+203,2,Residencial (origen a la mañana),108 - Usina del Arte
+204,2,Residencial (origen a la mañana),167 - Hipólito Yrigoyen
+206,1,Polos de trabajo y estudio,159 - Fitz Roy & Gorriti
+207,0,Uso de tarde,123 - BASUALDO Y RODO
+208,1,Polos de trabajo y estudio,145 - RAVIGNANI
+210,0,Uso de tarde,335 - General Urquiza
+212,2,Residencial (origen a la mañana),129 - Velasco
+213,2,Residencial (origen a la mañana),136 - Acevedo
+215,2,Residencial (origen a la mañana),113 - Guatemala
+216,0,Uso de tarde,059 - Coronel Diaz
+219,2,Residencial (origen a la mañana),140 - Las Casas
+220,0,Uso de tarde,097 - Avelino Diaz
+222,0,Uso de tarde,160 - Godoy Cruz y Libertador
+223,2,Residencial (origen a la mañana),178 - José Marmol
+227,2,Residencial (origen a la mañana),188 - Aranguren
+228,3,Centro (destino a la mañana),010 - Madero UCA
+229,2,Residencial (origen a la mañana),243 - PLAZOLETA CELEDONIO FLORES
+230,0,Uso de tarde,259 - PLAZA CASTELLI
+231,2,Residencial (origen a la mañana),384 - PLAZA BENITO NAZAR
+232,2,Residencial (origen a la mañana),252 - Tamborini
+234,1,Polos de trabajo y estudio,344 - UNIVERSIDAD DI TELLA
+235,1,Polos de trabajo y estudio,281 - Villa Urquiza
+236,1,Polos de trabajo y estudio,254 - Plaza Rafael Hernandez
+237,2,Residencial (origen a la mañana),302 - ESTACION VILLA LURO
+239,0,Uso de tarde,391 - Plaza República de Ecuador
+241,2,Residencial (origen a la mañana),348 - Villa del Parque
+242,1,Polos de trabajo y estudio,103 - MALBA
+245,1,Polos de trabajo y estudio,248 - Husares
+247,1,Polos de trabajo y estudio,282 - Tronador
+248,0,Uso de tarde,346 - Plaza Zapiola
+251,1,Polos de trabajo y estudio,388 - Plaza Jose C Paz
+252,0,Uso de tarde,331 - CALIFORNIA
+253,2,Residencial (origen a la mañana),383 - BOEDO Y VENEZUELA
+254,2,Residencial (origen a la mañana),276 - PRIMERA JUNTA
+255,2,Residencial (origen a la mañana),374 - Puan
+257,0,Uso de tarde,264 - Plaza Marcos Sastre
+258,0,Uso de tarde,336 - La Pampa
+259,0,Uso de tarde,290 - Club Excursionistas
+260,0,Uso de tarde,371 - Paseo de las Americas
+261,2,Residencial (origen a la mañana),272 - Plaza Bruno Giordano
+262,0,Uso de tarde,349 - Plaza Saenz Peña
+263,0,Uso de tarde,270 - PLAZA DEL ANGEL GRIS
+264,2,Residencial (origen a la mañana),283 - BALBIN II
+265,0,Uso de tarde,361 - Plaza Don Segundo Sombra
+267,2,Residencial (origen a la mañana),315 - BEIRO Y SAN MARTÍN
+268,0,Uso de tarde,399 - GARCIA DEL RIO
+269,1,Polos de trabajo y estudio,260 - SAN MIGUEL DE GARICOITS
+270,2,Residencial (origen a la mañana),370 - Beauchef
+271,3,Centro (destino a la mañana),365 - Venancio Flores
+273,0,Uso de tarde,223 - GAINZA
+275,2,Residencial (origen a la mañana),256 - PLAZA NORUEGA
+277,0,Uso de tarde,292 - PLAZA BOLIVIA
+278,2,Residencial (origen a la mañana),233 - MONROE
+280,0,Uso de tarde,222 - SIMON BOLIVAR
+281,0,Uso de tarde,350 - Plaza Irlanda
+284,0,Uso de tarde,229 - RIGLOS
+289,0,Uso de tarde,255 - BARRANCAS DE BELGRANO
+291,2,Residencial (origen a la mañana),244 - UADE
+299,2,Residencial (origen a la mañana),221 - CULPINA
+301,0,Uso de tarde,309 - UTN II
+302,2,Residencial (origen a la mañana),340 - PLAZA NUEVA POMPEYA
+304,1,Polos de trabajo y estudio,395 - Agronomia II
+307,1,Polos de trabajo y estudio,341 - EDITORIAL PERFIL
+308,0,Uso de tarde,251 - Solar de la Abadía
+309,0,Uso de tarde,298 - PLAZA DR. JUAN B. TERAN
+310,0,Uso de tarde,356 - ESTACIÓN LUGANO
+311,1,Polos de trabajo y estudio,213 - Hospital Alvear
+316,2,Residencial (origen a la mañana),205 - SAN MARTIN
+318,2,Residencial (origen a la mañana),285 - ESPINOSA
+322,1,Polos de trabajo y estudio,289 - MONTAÑESES
+323,2,Residencial (origen a la mañana),240 - ECHEVERRIA
+324,0,Uso de tarde,280 - JURAMENTO
+327,0,Uso de tarde,366 - VILLA OLÍMPICA
+329,2,Residencial (origen a la mañana),100 - Plaza Gurruchaga
+330,1,Polos de trabajo y estudio,148 -La Paternal
+333,2,Residencial (origen a la mañana),203 - Beiro
+335,1,Polos de trabajo y estudio,206 - Galicia
+336,0,Uso de tarde,207 - PLAZA ARENALES
+340,2,Residencial (origen a la mañana),359 - PLAZA BALCARCE
+342,2,Residencial (origen a la mañana),218 - Campana
+348,0,Uso de tarde,231 - Margariños Cervantes
+349,1,Polos de trabajo y estudio,232 - Sucre y Martinez
+353,3,Centro (destino a la mañana),237 - Madero Office
+355,2,Residencial (origen a la mañana),242 - Plazoleta Rafael del Riego
+358,0,Uso de tarde,249 - Vidal
+359,1,Polos de trabajo y estudio,250 - Fleni
+361,2,Residencial (origen a la mañana),258 - Plaza J.J. Paso
+362,2,Residencial (origen a la mañana),262 - Holmberg
+363,0,Uso de tarde,354 - José Martí
+364,2,Residencial (origen a la mañana),381 - Matienzo Y Arce
+366,0,Uso de tarde,360 - Plaza Ramon Falcon
+367,2,Residencial (origen a la mañana),287 - Belaustegui
+368,2,Residencial (origen a la mañana),378 - AGRONOMIA
+369,0,Uso de tarde,304 - Navarro
+370,0,Uso de tarde,305 - Plaza Martin Rodriguez
+371,0,Uso de tarde,269 - Plaza De La Misericordia
+372,2,Residencial (origen a la mañana),322 - MARTÍ Y DIRECTORIO
+373,0,Uso de tarde,265 - Plaza Exodo Jujeño
+374,2,Residencial (origen a la mañana),367 - Eva Perón
+375,2,Residencial (origen a la mañana),301 - Arregui Y Terrada
+376,1,Polos de trabajo y estudio,324 - Las Victorias
+378,1,Polos de trabajo y estudio,215 - HOSPITAL ALVAREZ
+379,0,Uso de tarde,390 - De Los Ombues
+381,2,Residencial (origen a la mañana),274 - Gavilán
+382,2,Residencial (origen a la mañana),204 - Biarritz
+383,0,Uso de tarde,263 - Plaza Echeverria
+384,2,Residencial (origen a la mañana),267 - Plaza 25 De Agosto
+385,2,Residencial (origen a la mañana),268 - Plaza Aristóbulo Del Valle
+386,2,Residencial (origen a la mañana),277 - Coghlan
+387,1,Polos de trabajo y estudio,278 - Donato Alvarez
+392,2,Residencial (origen a la mañana),297 - TRONADOR Y GARCÍA DEL RÍO
+393,1,Polos de trabajo y estudio,300 - Jose Artigas
+395,1,Polos de trabajo y estudio,303 - Huaura
+400,2,Residencial (origen a la mañana),313 - De Los Incas
+403,0,Uso de tarde,316 - Buenos Aires
+407,0,Uso de tarde,330 - Parque Avellaneda
+408,2,Residencial (origen a la mañana),364 - CERRETTI Y MANUELA PEDRAZA
+412,0,Uso de tarde,372 - VILLA SOLDATI
+413,0,Uso de tarde,382 - MERCADO DE HACIENDA MATADEROS
+414,2,Residencial (origen a la mañana),385 - Franklin
+416,0,Uso de tarde,257 - Plaza Francisco Ramirez
+417,2,Residencial (origen a la mañana),127 - PLAZA LEONARDO N. ALEM
+418,1,Polos de trabajo y estudio,345 - Plaza Mafalda
+420,3,Centro (destino a la mañana),375 - Ciudad Universitaria I
+422,0,Uso de tarde,379 - PARQUE SARMIENTO II
+423,0,Uso de tarde,043 - PLAZA ALBERDI
+424,0,Uso de tarde,387 - Luna
+425,0,Uso de tarde,394 - Av. La Plata
+426,2,Residencial (origen a la mañana),396 - PLAZA ALBERTI
+427,2,Residencial (origen a la mañana),397 - PARQUE SANTOJANNI
+428,1,Polos de trabajo y estudio,225 - HOSPITAL TORNU
+429,0,Uso de tarde,201 - PLAZA EJERCITO DE LOS ANDES
+431,1,Polos de trabajo y estudio,362 - PARQUE DE LA MEMORIA
+432,2,Residencial (origen a la mañana),187 - Jose Maria Moreno
+433,2,Residencial (origen a la mañana),273 - Plazoleta Colombia
+434,2,Residencial (origen a la mañana),247 - PLAZA LUCIO DEMARE
+435,1,Polos de trabajo y estudio,227 -Club Ciudad de Buenos Aires
+436,2,Residencial (origen a la mañana),253 - Plaza Colegiales
+440,2,Residencial (origen a la mañana),142 - ARMENIA
+444,3,Centro (destino a la mañana),061 - Ministerio de Economia
+448,0,Uso de tarde,393 - Barrio 31
+449,2,Residencial (origen a la mañana),352 - Papa Francisco
+453,1,Polos de trabajo y estudio,028 - Plaza de la Bandera
+454,1,Polos de trabajo y estudio,176 - Plaza Derechos del hombre
+455,0,Uso de tarde,039 - Plaza Don Bosco
+457,0,Uso de tarde,110 - PLAZA CD DE BANFF
+458,0,Uso de tarde,219 - Parque Chacabuco II
+460,2,Residencial (origen a la mañana),133 - BEIRO Y SEGUROLA
+461,2,Residencial (origen a la mañana),106 - MOSCONI Y CONSTITUYENTES
+464,1,Polos de trabajo y estudio,377 - CIUDAD UNIVERSITARIA III
+465,2,Residencial (origen a la mañana),192 - HOSPITAL SIRIO
+466,2,Residencial (origen a la mañana),333 - PARQUE DE LA ESTACIÓN
+468,2,Residencial (origen a la mañana),084 - TEATRO PICADERO
+469,2,Residencial (origen a la mañana),062 - PARQUE ONEGA
+471,2,Residencial (origen a la mañana),173 - EL LIBERTADOR
+472,1,Polos de trabajo y estudio,310 - FREIRE II
+473,2,Residencial (origen a la mañana),216 - EMILIO LAMARCA
+474,2,Residencial (origen a la mañana),224 - BAIGORRIA
+475,0,Uso de tarde,238 - PLAZA LAS TOSCANERAS
+476,0,Uso de tarde,279 - PLAZA MONTE CASTRO
+477,2,Residencial (origen a la mañana),311 - SEC. DE INNOVACION Y TRANSFORMACIÓN
+478,2,Residencial (origen a la mañana),015 - AMENABAR
+479,2,Residencial (origen a la mañana),347 - CARABOBO
+480,1,Polos de trabajo y estudio,353 - PLAZA VÉLEZ SARSFIELD
+481,0,Uso de tarde,369 - PLAZA LARRAZABAL
+482,0,Uso de tarde,376 - PASEO DE LA COSTANERA
+483,0,Uso de tarde,175 - PLAZA MACKENNA
+484,2,Residencial (origen a la mañana),295 - SUPERÍ
+486,2,Residencial (origen a la mañana),220 - PLAZA FELIX LIMA
+487,0,Uso de tarde,239 - AVENIDA CRAMER
+488,0,Uso de tarde,234 - AVENIDA TRIUNVIRATO
+489,1,Polos de trabajo y estudio,288 - SECRETARÍA DE DEPORTES
+490,0,Uso de tarde,245 - COSTANERA NORTE
+491,2,Residencial (origen a la mañana),266 - PLAZA SABATTINI
+492,2,Residencial (origen a la mañana),325 - MEDRANO
+493,2,Residencial (origen a la mañana),208 - NICASIO OROÑO
+494,0,Uso de tarde,314 - ALLENDE
+496,2,Residencial (origen a la mañana),052 - CAMPANA II
+497,2,Residencial (origen a la mañana),307 - CERETTI
+498,2,Residencial (origen a la mañana),055 - HABANA
+499,0,Uso de tarde,286 - FILOSOFIA Y LETRAS
+500,2,Residencial (origen a la mañana),235 - COMUNA 13
+501,2,Residencial (origen a la mañana),020 - GRECIA
+502,2,Residencial (origen a la mañana),296 - SAN ISIDRO LABRADOR
+503,2,Residencial (origen a la mañana),212 - TRES ARROYOS
+504,1,Polos de trabajo y estudio,214 - MORÓN
+505,1,Polos de trabajo y estudio,337 - AV. J. B. JUSTO
+507,0,Uso de tarde,271 - VILLA SOLDATI II
+508,2,Residencial (origen a la mañana),170 - RAFAELA
+509,1,Polos de trabajo y estudio,386 - VELEZ SARSFIELD
+511,1,Polos de trabajo y estudio,284 - AV. FOREST
+512,1,Polos de trabajo y estudio,195 - PARQUE CHAS
+513,2,Residencial (origen a la mañana),308 - SAN MARTIN II
+515,0,Uso de tarde,294 - PLAZOLETA RÍO DE LA PLATA
+516,0,Uso de tarde,368 - PLAZA DE LA SHOÁ
+517,2,Residencial (origen a la mañana),332 - PACÍFICO II
+518,2,Residencial (origen a la mañana),329 - LAS CAÑITAS
+519,1,Polos de trabajo y estudio,053 - AV. DEL LIBERTADOR 
+520,0,Uso de tarde,180 - PARQUE OLIMPICO
+521,1,Polos de trabajo y estudio,226 - AV. WARNES
+522,2,Residencial (origen a la mañana),119 - PLAZOLETA BENEDIT
+524,2,Residencial (origen a la mañana),338 - AV. CABILDO
+525,1,Polos de trabajo y estudio,317 - ESCUELA RAGGIO
+526,1,Polos de trabajo y estudio,088 - NUÑEZ 
+527,2,Residencial (origen a la mañana),068 - AV. CORDOBA
+528,2,Residencial (origen a la mañana),042 - Skate Park Villa Luro
+530,0,Uso de tarde,031 - PARQUE RIVADAVIA
+531,0,Uso de tarde,048 - JOSE AMALFITANI
+532,2,Residencial (origen a la mañana),072 - INSTITUTO POLITÉCNICO MODELO
+533,1,Polos de trabajo y estudio,077 - CRISOLOGO LARRALDE
+534,1,Polos de trabajo y estudio,081 - PARQUE DE LAS CIENCIAS
+535,1,Polos de trabajo y estudio,090 - HONORIO PUEYRREDON
+536,3,Centro (destino a la mañana),019 - PLAZA  SAN MARTIN
+537,2,Residencial (origen a la mañana),389 - Av. ELCANO
+538,1,Polos de trabajo y estudio,047 - PARQUE DE LA INNOVACIÓN
+539,0,Uso de tarde,115 - JUAN DE GARAY
+540,0,Uso de tarde,185 - JORGE NEWBERY
+541,0,Uso de tarde,198 - CENTRO METROPOLITANO DE DISEÑO
+542,0,Uso de tarde,202 - VICTOR MANUEL ACUÑA
+543,1,Polos de trabajo y estudio,139 - CASA ROSADA
+544,3,Centro (destino a la mañana),078 - TEATRO COLÓN
+545,2,Residencial (origen a la mañana),141 - DEL BARCO CENTENERA
+546,0,Uso de tarde,143 - EMILIO MITRE 
+547,2,Residencial (origen a la mañana),023 - ALMAGRO
+548,0,Uso de tarde,051 - PLAZA SUDAMERICA
+549,0,Uso de tarde,095 - EMILIO CASTRO
+550,2,Residencial (origen a la mañana),154 - LINIERS
+551,0,Uso de tarde,157 - LEGUIZAMON
+552,1,Polos de trabajo y estudio,209 - DEVOTO
+553,0,Uso de tarde,210 - JOSE LEON CABEZON
+554,2,Residencial (origen a la mañana),211 - BLANCO ENCALADA
+555,2,Residencial (origen a la mañana),217 - RUIZ HUIDOBRO
+556,2,Residencial (origen a la mañana),230 - AREVALO
+557,0,Uso de tarde,241 - BIBLIOTECA NACIONAL
+558,2,Residencial (origen a la mañana),236 - UBA SOCIALES
+559,1,Polos de trabajo y estudio,299 - ALVEAR TENIS CLUB
+560,0,Uso de tarde,291 - JUAN BAUTISTA ALBERDI
+561,2,Residencial (origen a la mañana),293 - GREGORIO DE LAFERRERE
+562,2,Residencial (origen a la mañana),246 - ALMAFUERTE
+563,0,Uso de tarde,312 - PARQUE GENERAL PAZ
+564,2,Residencial (origen a la mañana),318 - QUESADA
+565,2,Residencial (origen a la mañana),319 - HEREDIA
+566,0,Uso de tarde,306 - PLAZA RAVIGNANI
+567,3,Centro (destino a la mañana),228 - UNIVERSIDAD DEL SALVADOR
+568,2,Residencial (origen a la mañana),342 - HONDURAS
+569,0,Uso de tarde,339 - HIPODROMO DE PALERMO
+570,0,Uso de tarde,030 - GIRALT
+572,0,Uso de tarde,125 - BILBAO
+573,1,Polos de trabajo y estudio,040 - HERRERA
+574,2,Residencial (origen a la mañana),321 - EZEIZA
+575,2,Residencial (origen a la mañana),327 - IBERA
+576,2,Residencial (origen a la mañana),328 - JARDIN BOTANICO
+577,1,Polos de trabajo y estudio,326 - PICO
+579,2,Residencial (origen a la mañana),363 - NAZCA
+580,2,Residencial (origen a la mañana),320 - PAVON
+581,2,Residencial (origen a la mañana),011 - PLAZA BOEDO
+582,2,Residencial (origen a la mañana),343 - NEUQUEN
+583,2,Residencial (origen a la mañana),357 - ATAHUALPA
+584,2,Residencial (origen a la mañana),355 - GUARDIA NACIONAL
+585,2,Residencial (origen a la mañana),358 - SAN BLAS
+586,0,Uso de tarde,380 - NOGOYA
+587,2,Residencial (origen a la mañana),351 - PAYSANDU 
+588,2,Residencial (origen a la mañana),400 - HIDALGO
+589,2,Residencial (origen a la mañana),016 - MUSEO DEL AGUA
+590,2,Residencial (origen a la mañana),392 - CHARCAS
+591,0,Uso de tarde,398 - MERCEDES
+593,1,Polos de trabajo y estudio,341 - EDITORIAL PERFIL
+594,3,Centro (destino a la mañana),172 - UBA EXACTAS
+597,1,Polos de trabajo y estudio,202 - RODNEY
+598,2,Residencial (origen a la mañana),222 - CLUB NAUTICO BUCHARDO

@@ -1,6 +1,6 @@
 # Modelo predictivo de demanda de Ecobici (CABA)
 
-Ciencia de Datos Aplicada (ITBA) · Segundo entregable: *Recopilación y preparación de datos*.
+Ciencia de Datos Aplicada (ITBA) · Segundo entregable: *Recopilación y preparación de datos* · Tercer entregable: *Modelado de la solución*.
 
 ## Datos
 
@@ -38,13 +38,20 @@ Correrlos en orden, porque cada uno usa lo que genera el anterior.
 | [`01_adquisicion`](notebooks/01_adquisicion.ipynb) | Describe cada fuente (origen, formato y variables) y la carga: fotos de estaciones, viajes 2024–2026, clima (API de Open-Meteo) y feriados (API de ArgentinaDatos). | `data/interim/` y `data/feriados.csv` | 1 min, más la descompresión inicial |
 | [`02_eda_calidad`](notebooks/02_eda_calidad.ipynb) | Análisis exploratorio (tipos, faltantes, duplicados, outliers y gráficos), inventario de calidad y confiabilidad del target. | Sólo gráficos y tablas | 2 min |
 | [`03_transformaciones`](notebooks/03_transformaciones.ipynb) | Limpieza, integración, nuevas variables, codificación, partición, normalización y reflexión final. | `data/processed/dataset_estacion_hora.parquet` | 1 min |
+| [`04_modelado`](notebooks/04_modelado.ipynb) | Variables con rezago, baselines, regresión de Poisson, gradient boosting (búsqueda de hiperparámetros y validación cruzada temporal), evaluación en test, agrupamiento de estaciones, rebalanceo y ampliación, y persistencia. | `models/` | 20 min |
 
 Se pueden abrir con `jupyter lab` y ejecutar cada uno con *Run All*, o desde la terminal:
 
 ```bash
 cd notebooks
-jupyter nbconvert --to notebook --execute --inplace 01_adquisicion.ipynb 02_eda_calidad.ipynb 03_transformaciones.ipynb
+jupyter nbconvert --to notebook --execute --inplace 01_adquisicion.ipynb 02_eda_calidad.ipynb 03_transformaciones.ipynb 04_modelado.ipynb
 ```
+
+## Modelos
+
+El notebook 04 guarda en `models/` los modelos entrenados (`.joblib`), los grupos de estaciones y un `metadata.json` con las variables, los hiperparámetros, las métricas de test y la consulta SQL que arma las variables. La función `predecir_dia` del final del notebook muestra cómo cargarlos y predecir un día sin reentrenar.
+
+Los `.joblib` de scikit-learn sólo se garantizan con la misma versión con la que se guardaron (está en `metadata.json`). Con otra versión, volver a correr el notebook 04.
 
 Los tiempos son de una corrida en una Mac con 24 GB de RAM. El notebook 02 carga las 21 M de fotos en memoria: se recomiendan al menos 16 GB.
 

@@ -14,7 +14,7 @@ folium>=0.17
 # Calendario (02)
 holidays>=0.50
 
-# Normalización (03)
+# Normalización (03) y modelos (04)
 scikit-learn>=1.4
 
 # Para abrir y ejecutar los notebooks
