@@ -1,4 +1,4 @@
-# Datos (los tres notebooks). pandas fijado: es la versión con la que se ejecutaron los notebooks
+# Datos (los cuatro notebooks). pandas fijado: es la versión con la que se ejecutaron los notebooks
 pandas==2.3.3
 numpy>=1.26,<3
 duckdb>=1.1
@@ -15,7 +15,7 @@ folium>=0.17
 holidays>=0.50
 
 # Normalización (03) y modelos (04)
-scikit-learn>=1.4
+scikit-learn==1.9.1  # los .joblib de models/ sólo se garantizan con esta versión
 
 # Para abrir y ejecutar los notebooks
 jupyter
