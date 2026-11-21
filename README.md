@@ -1,6 +1,6 @@
 # Modelo predictivo de demanda de Ecobici (CABA)
 
-Ciencia de Datos Aplicada (ITBA) · Segundo entregable: *Recopilación y preparación de datos* · Tercer entregable: *Modelado de la solución*.
+Ciencia de Datos Aplicada (ITBA) · Segundo entregable: *Recopilación y preparación de datos* · Tercer entregable: *Modelado de la solución* · Cuarto entregable: *Despliegue*.
 
 ## Datos
 
@@ -56,6 +56,75 @@ Los `.joblib` de scikit-learn sólo se garantizan con la misma versión con la q
 Los tiempos de los notebooks 01 a 03 son de una corrida en una Mac con 24 GB de RAM. El notebook 02 carga las 21 M de fotos en memoria: se recomiendan al menos 16 GB. El 04 se corrió completo en una notebook con 16 GB de RAM, donde el sistema usa el disco como memoria y tarda bastante más.
 
 El 01 necesita conexión a internet para las APIs. Si la API de feriados no responde, `data/feriados.csv` ya está versionado en el repositorio.
+
+## Despliegue (cuarto entregable)
+
+Caso de uso: el equipo de logística decide, antes de una franja pico, qué estaciones **abastecer** (se van a vaciar) y cuáles **descargar** (se van a llenar). Es la lista de la sección 12.1 del notebook 04, ahora servida por una API y un tablero.
+
+```
+interfaz/app.py (Streamlit) --HTTP--> api/main.py (FastAPI) --> src/ecobici/modelo.py --> models/ + data/processed/
+```
+
+- `src/ecobici/modelo.py`: carga los modelos y predice. No depende de FastAPI. Arma las variables con la consulta SQL guardada en `models/metadata.json`, la misma con la que se entrenó.
+- `api/main.py`: valida las entradas, llama a `src/ecobici` y traduce los errores a códigos HTTP. Carga los modelos una sola vez, al arrancar.
+- `interfaz/app.py`: sólo habla con la API, por HTTP.
+
+### Cómo correrlo
+
+Hacen falta `models/` (versionado) y `data/processed/` (lo genera el notebook 03).
+
+En local, con las dependencias de `requirements.txt` instaladas y desde la raíz del repositorio:
+
+```bash
+uvicorn api.main:app --reload        # API en http://localhost:8000 (documentación en /docs)
+streamlit run interfaz/app.py        # tablero en http://localhost:8501, en otra terminal
+python -m pytest tests -q            # tests contra los modelos y el dataset reales
+```
+
+Con Docker, la misma imagen corre los dos servicios y monta `models/` y `data/processed/` como volúmenes de sólo lectura (el dataset pesa 434 MB y no entra en la imagen):
+
+```bash
+docker compose up --build
+```
+
+Variables de entorno: `ECOBICI_MODELS_DIR` (por defecto `models`), `ECOBICI_DATA_DIR` (por defecto `data/processed`, con `dataset_estacion_hora.parquet` y `estaciones.csv`) y `ECOBICI_API_URL` para la interfaz (por defecto `http://localhost:8000`).
+
+### Endpoints
+
+| Método y ruta | Entrada | Salida |
+|---|---|---|
+| `GET /salud` | — | Estado, fecha de entrenamiento y rango de fechas que se pueden predecir |
+| `GET /modelo` | — | Descripción, horizonte, variables, métricas de test, clima esperado y versiones |
+| `GET /estaciones` | — | Id, nombre, latitud, longitud y grupo de cada estación |
+| `POST /prediccion` | `fecha`, `clima` (opcional), `station_ids` (opcional) | Retiros y arribos predichos y reales por estación y hora, y los totales del día |
+| `POST /rebalanceo` | `fecha`, `franja` (`manana` o `tarde`), `top` (1 a 50, por defecto 15), `clima` (opcional) | Las dos listas ordenadas con el flujo neto predicho y el real, y la precisión contra lo que pasó |
+
+Ejemplo:
+
+```bash
+curl -X POST localhost:8000/rebalanceo -H "content-type: application/json" \
+  -d '{"fecha": "2026-06-02", "franja": "manana", "top": 15}'
+```
+
+```json
+{
+  "fecha": "2026-06-02", "franja": "manana", "horas": [6, 7, 8, 9],
+  "abastecer": [{"station_id": 175, "nombre": "147 - Constitución", "nombre_grupo": "Residencial (origen a la mañana)",
+                 "lat": -34.6269, "lon": -58.3807, "flujo_predicho": -18.97, "flujo_real": -37}, "..."],
+  "descargar": [{"station_id": 26, "nombre": "026 - JUANA MANSO I", "flujo_predicho": 19.44, "flujo_real": 19, "...": "..."}],
+  "precision_abastecer": 0.2, "precision_descargar": 0.533
+}
+```
+
+`clima` tiene `temperatura_c`, `precipitacion_mm` (lluvia por hora) y `viento_kmh`, y reemplaza el clima registrado en las 24 horas del día. Sirve para cargar un pronóstico o probar escenarios. Errores: un cuerpo inválido devuelve 422, y una fecha fuera del rango o una estación desconocida devuelven 404 con el motivo. Si faltan los modelos o el dataset, la API no arranca y el error dice qué archivo falta.
+
+### Decisiones y límites
+
+- **El dataset termina el 31/08/2026**, así que el servicio predice días entre el 30/01/2024 y el 31/08/2026. Cada día necesita sus 29 días previos. Como los días ya pasaron, la respuesta trae también lo que pasó, y el tablero muestra cuánto acertó el modelo.
+- **En producción** la grilla del día siguiente se armaría con las fotos en vivo del feed GBFS, los viajes del día anterior y el pronóstico del clima. La consulta SQL y los modelos no cambian. Hoy ese pronóstico se puede cargar a mano con `clima`.
+- **Las variables se arman con la misma consulta del entrenamiento**, leída de `metadata.json`. Se le pasa sólo el tramo del dataset que necesita (los 29 días previos y el día), lo que da las mismas variables y lleva una predicción de 24 s a menos de medio segundo.
+- **Las listas coinciden con el ejemplo de la sección 12.1** para la mañana del 02/06/2026. Los tests lo verifican. Una predicción o un rebalanceo tarda 0,4 s.
+- **Para ordenar estaciones, el modelo empata con la media histórica** (sección 12.1 del notebook 04). Su aporte está en estimar cuántas bicis mover.
 
 ## Fuentes
 
