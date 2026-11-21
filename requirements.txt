@@ -19,3 +19,8 @@ scikit-learn==1.9.1  # los .joblib de models/ sólo se garantizan con esta versi
 
 # Para abrir y ejecutar los notebooks
 jupyter
+
+# API e interfaz (cuarto entregable)
+-r requirements-despliegue.txt
+pytest>=8
+httpx>=0.27
