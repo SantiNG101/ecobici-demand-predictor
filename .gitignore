@@ -1,6 +1,7 @@
 # Datos: los crudos viven fuera del repo y los intermedios se regeneran con los notebooks
 data/interim/
 data/processed/
+data/processed.anterior/
 datasets
 __MACOSX/
 *:Zone.Identifier
