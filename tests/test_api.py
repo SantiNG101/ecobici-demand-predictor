@@ -1,3 +1,5 @@
+from datetime import date, timedelta
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -15,8 +17,11 @@ def cliente():
 def test_salud_informa_el_rango_de_fechas(cliente):
     respuesta = cliente.get("/salud")
     assert respuesta.status_code == 200
-    assert respuesta.json() | {"modelo_entrenado": None} == {
-        "estado": "ok", "modelo_entrenado": None, "fecha_minima": "2024-01-30", "fecha_maxima": "2026-08-31"}
+    cuerpo = respuesta.json()
+    assert cuerpo["estado"] == "ok" and cuerpo["fecha_minima"] == "2024-01-30"
+    # El último día crece con scripts/actualizar_datos.py, y siempre se puede predecir
+    assert cuerpo["fecha_maxima"] >= "2026-08-31"
+    assert cliente.post("/rebalanceo", json={"fecha": cuerpo["fecha_maxima"], "franja": "manana"}).status_code == 200
 
 
 def test_prediccion_de_un_dia_completo(cliente):
@@ -37,8 +42,9 @@ def test_prediccion_filtrada_por_estacion(cliente):
     assert cuerpo["totales"]["retiros"] == 100
 
 
-@pytest.mark.parametrize("fecha", ["2024-01-29", "2026-09-01"])
+@pytest.mark.parametrize("fecha", ["2024-01-29", None])  # None: el día después del último
 def test_fecha_fuera_del_rango_es_404(cliente, fecha):
+    fecha = fecha or str(date.fromisoformat(cliente.get("/salud").json()["fecha_maxima"]) + timedelta(days=1))
     assert cliente.post("/prediccion", json={"fecha": fecha}).status_code == 404
     assert cliente.post("/rebalanceo", json={"fecha": fecha, "franja": "manana"}).status_code == 404
 
