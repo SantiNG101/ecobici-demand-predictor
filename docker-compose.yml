@@ -1,0 +1,27 @@
+services:
+  api:
+    build: .
+    image: ecobici-demanda
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/app/models:ro
+      - ./data/processed:/app/data/processed:ro
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/salud')"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 15s
+
+  interfaz:
+    image: ecobici-demanda
+    command: ["streamlit", "run", "interfaz/app.py", "--server.address=0.0.0.0", "--server.port=8501",
+              "--server.headless=true", "--browser.gatherUsageStats=false"]
+    ports:
+      - "8501:8501"
+    environment:
+      ECOBICI_API_URL: http://api:8000
+    depends_on:
+      api:
+        condition: service_healthy
