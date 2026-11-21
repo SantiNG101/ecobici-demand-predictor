@@ -89,6 +89,23 @@ docker compose up --build
 
 Variables de entorno: `ECOBICI_MODELS_DIR` (por defecto `models`), `ECOBICI_DATA_DIR` (por defecto `data/processed`, con `dataset_estacion_hora.parquet` y `estaciones.csv`) y `ECOBICI_API_URL` para la interfaz (por defecto `http://localhost:8000`).
 
+### Actualizar los datos
+
+```bash
+python scripts/actualizar_datos.py     # opciones: --solo-descargar, --sin-descargar, --fecha-fin AAAA-MM-DD
+```
+
+El script extiende el dataset sin reentrenar:
+
+1. Baja los viajes de BA Data del año en curso y del anterior, y las fotos de los meses nuevos de bike-sharing-history. Sólo baja lo que cambió: guarda el tamaño y la fecha de cada archivo en `datasets/descargas.json`.
+2. Toma como fin el último día completo de viajes.
+3. Respalda `data/processed/` en `data/processed.anterior/` y ejecuta los notebooks 01 y 03 con `ECOBICI_FECHA_FIN`. Las copias ejecutadas quedan en `data/interim/notebooks_ejecutados/` y los notebooks del repositorio no cambian.
+4. Verifica que el dataset termine en esa fecha, que tenga más filas y que los viajes del 02/06/2026 sigan iguales.
+
+El 21/11/2026 llevó el dataset del 31/08 al 30/09/2026 en 4 min 20 s. Las descargas tardaron 3 min (355 MB, contando el zip de 2025, que se baja una sola vez) y los notebooks 74 s. Una segunda corrida no baja nada y termina en 3 s. La API lee el rango de fechas al arrancar, así que después hay que reiniciarla.
+
+BA Data publica los viajes con demora: el zip de 2026 se actualizó el 07/10 con viajes hasta el 30/09. Con esta fuente no se llega a predecir el día siguiente. Para eso hace falta la grilla en vivo que se describe más abajo.
+
 ### Endpoints
 
 | Método y ruta | Entrada | Salida |
@@ -120,7 +137,7 @@ curl -X POST localhost:8000/rebalanceo -H "content-type: application/json" \
 
 ### Decisiones y límites
 
-- **El dataset termina el 31/08/2026**, así que el servicio predice días entre el 30/01/2024 y el 31/08/2026. Cada día necesita sus 29 días previos. Como los días ya pasaron, la respuesta trae también lo que pasó, y el tablero muestra cuánto acertó el modelo.
+- **El dataset de la entrega termina el 31/08/2026**, así que el servicio predice días entre el 30/01/2024 y el 31/08/2026, o hasta donde lo extienda `scripts/actualizar_datos.py`. Cada día necesita sus 29 días previos. Como los días ya pasaron, la respuesta trae también lo que pasó, y el tablero muestra cuánto acertó el modelo.
 - **En producción** la grilla del día siguiente se armaría con las fotos en vivo del feed GBFS, los viajes del día anterior y el pronóstico del clima. La consulta SQL y los modelos no cambian. Hoy ese pronóstico se puede cargar a mano con `clima`.
 - **Las variables se arman con la misma consulta del entrenamiento**, leída de `metadata.json`. Se le pasa sólo el tramo del dataset que necesita (los 29 días previos y el día), lo que da las mismas variables y lleva una predicción de 24 s a menos de medio segundo.
 - **Las listas coinciden con el ejemplo de la sección 12.1** para la mañana del 02/06/2026. Los tests lo verifican. Una predicción o un rebalanceo tarda 0,4 s.
