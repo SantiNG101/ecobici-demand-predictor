@@ -91,3 +91,78 @@ def test_lluvia_fuerte_baja_los_retiros(cliente):
         "fecha": FECHA, "clima": {"temperatura_c": 10, "precipitacion_mm": 8, "viento_kmh": 30}}).json()
     assert con_lluvia["totales"]["pred_retiros"] < sin_pronostico
     assert con_lluvia["clima"]["precipitacion_mm"] == 8
+
+
+def caso_registrado(cliente, station_id=175, hora=8):
+    respuesta = cliente.get(f"/estaciones/{station_id}/caso", params={"fecha": FECHA, "hora": hora})
+    assert respuesta.status_code == 200
+    return respuesta.json()
+
+
+@pytest.mark.parametrize("station_id,hora", [(175, 8), (26, 18), (130, 0)])
+def test_un_caso_registrado_da_lo_mismo_que_la_prediccion_del_dia(cliente, station_id, hora):
+    resultado = cliente.post("/prediccion/casos", json={"casos": [caso_registrado(cliente, station_id, hora)]}).json()["resultados"][0]
+    filas = cliente.post("/prediccion", json={"fecha": FECHA, "station_ids": [station_id]}).json()["filas"]
+    esperada = next(f for f in filas if f["hora"] == hora)
+    assert resultado["pred_retiros"] == pytest.approx(esperada["pred_retiros"], rel=1e-6)
+    assert resultado["pred_arribos"] == pytest.approx(esperada["pred_arribos"], rel=1e-6)
+    assert resultado["flujo_neto"] == pytest.approx(resultado["pred_arribos"] - resultado["pred_retiros"])
+
+
+def test_casos_con_fecha_futura_y_estacion_que_no_existe(cliente):
+    base = caso_registrado(cliente)
+    futuro = base | {"fecha": "2026-12-01"}
+    nueva = {k: v for k, v in base.items() if k != "station_id"} | {"lat": -34.60, "lon": -58.42}
+    lluvia = base | {"clima": {"temperatura_c": 10, "precipitacion_mm": 5, "viento_kmh": 20}}
+    respuesta = cliente.post("/prediccion/casos", json={"casos": [base, futuro, nueva, lluvia]})
+    assert respuesta.status_code == 200
+    resultados = respuesta.json()["resultados"]
+    assert len(resultados) == 4 and all(r["pred_retiros"] >= 0 and r["pred_arribos"] >= 0 for r in resultados)
+    assert resultados[3]["pred_retiros"] < resultados[0]["pred_retiros"]
+
+
+def test_un_caso_no_necesita_el_estado_de_la_estacion(cliente):
+    sin_estado = {k: v for k, v in caso_registrado(cliente).items() if k != "estado"}
+    assert cliente.post("/prediccion/casos", json={"casos": [sin_estado]}).status_code == 200
+
+
+@pytest.mark.parametrize("cambio", [
+    {"hora": 24},
+    {"station_id": None},                  # sin ubicación
+    {"lat": -34.6, "lon": -58.4},          # station_id y coordenadas a la vez
+    {"retiros": {"ayer_misma_hora": 3}},   # demanda incompleta
+])
+def test_caso_invalido_es_422(cliente, cambio):
+    caso = caso_registrado(cliente) | cambio
+    assert cliente.post("/prediccion/casos", json={"casos": [caso]}).status_code == 422
+
+
+def test_sin_casos_es_422(cliente):
+    assert cliente.post("/prediccion/casos", json={"casos": []}).status_code == 422
+
+
+def test_caso_de_estacion_desconocida_es_404(cliente):
+    caso = caso_registrado(cliente) | {"station_id": 999999}
+    assert cliente.post("/prediccion/casos", json={"casos": [caso]}).status_code == 404
+    assert cliente.get("/estaciones/999999/caso", params={"fecha": FECHA, "hora": 8}).status_code == 404
+
+
+def test_caso_sin_datos_o_fuera_de_rango_es_404(cliente):
+    assert cliente.get("/estaciones/175/caso", params={"fecha": "2024-01-29", "hora": 8}).status_code == 404
+    activas = {f["station_id"] for f in cliente.post("/prediccion", json={"fecha": FECHA}).json()["filas"]}
+    inactiva = next(e["station_id"] for e in cliente.get("/estaciones").json() if e["station_id"] not in activas)
+    assert cliente.get(f"/estaciones/{inactiva}/caso", params={"fecha": FECHA, "hora": 8}).status_code == 404
+
+
+@pytest.mark.parametrize("fecha,esperado", [("2026-05-31", True), ("2026-06-01", False)])
+def test_avisa_si_el_dia_es_de_entrenamiento(cliente, fecha, esperado):
+    assert cliente.get("/salud").json()["fin_entrenamiento"] == "2026-05-31"
+    assert cliente.post("/prediccion", json={"fecha": fecha, "station_ids": [130]}).json()["en_entrenamiento"] is esperado
+    assert cliente.post("/rebalanceo", json={"fecha": fecha, "franja": "manana"}).json()["en_entrenamiento"] is esperado
+
+
+def test_rebalanceo_informa_la_precision_promedio(cliente):
+    cuerpo = cliente.post("/rebalanceo", json={"fecha": FECHA, "franja": "manana", "top": 15}).json()
+    # promedios de la sección 12.1 del notebook 04
+    assert round(cuerpo["promedio_abastecer"], 3) == 0.376
+    assert round(cuerpo["promedio_descargar"], 3) == 0.497
