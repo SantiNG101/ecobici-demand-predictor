@@ -205,6 +205,88 @@ def pestania_datos_nuevos(salud: dict, todas: list[dict], fecha_base: date) -> N
         st.json({"casos": [nuevo]})
 
 
+COLORES_NIVEL = {"estable": "🟢 estable", "leve": "🟡 leve", "alto": "🔴 alto"}
+
+
+def monitoreo_modelo() -> None:
+    st.subheader("¿El modelo sigue acertando?")
+    try:
+        m = api("/monitoreo/modelo")
+    except ErrorApi as error:
+        st.warning(str(error))
+        return
+    if not m["modelo_vigente"]:
+        st.warning("Este monitoreo es de otro modelo: hay que volver a correr `python scripts/monitorear_modelo.py`.")
+    avisos = [(mes["mes"], aviso) for mes in m["meses"] for aviso in mes["avisos"]]
+    vigilados = [mes["mes"] for mes in m["meses"] if not mes["referencia"]]
+    if avisos:
+        for mes, aviso in avisos:
+            st.error(f"**{mes}**: {aviso}")
+    elif vigilados:
+        st.success(f"Sin avisos en {', '.join(vigilados)}.")
+    else:
+        st.info("Todavía no hay meses posteriores al test: correr `scripts/actualizar_datos.py` y después "
+                "`scripts/monitorear_modelo.py`.")
+
+    fin = date.fromisoformat(m["fin_entrenamiento"])
+    st.caption(f"Entrenado hasta el {fin:%d/%m/%Y}, con datos hasta el {date.fromisoformat(m['ultima_fecha']):%d/%m/%Y}. "
+               "El error es el WAPE diario por estación: la suma de los errores sobre la suma de los viajes.")
+    semanas = pd.DataFrame([s for s in m["semanas"] if s["dias"] == 7])
+    semanas["Semana"] = pd.to_datetime(semanas.semana)
+    st.line_chart(semanas.rename(columns={"wape": "Modelo", "wape_semana_anterior": "Repetir la semana anterior"})
+                         .set_index("Semana")[["Modelo", "Repetir la semana anterior"]],
+                  color=[COLORES_CURVA[0], "#8c8c86"], y_label="Error (%)", height=260)
+    meses = pd.DataFrame(m["meses"])
+    meses["Uso"] = meses.referencia.map({True: "referencia (test)", False: "vigilado"})
+    st.dataframe(meses.rename(columns={"mes": "Mes", "retiros_por_dia": "Retiros por día", "wape": "Error modelo %",
+                                       "wape_semana_anterior": "Error semana ant. %", "sesgo": "Sesgo %",
+                                       "estaciones_nuevas": "Estaciones nuevas"})
+                      [["Mes", "Uso", "Retiros por día", "Error modelo %", "Error semana ant. %", "Sesgo %", "Estaciones nuevas"]],
+                 hide_index=True, column_config={"Retiros por día": st.column_config.NumberColumn(format="%.0f"),
+                                                 **{c: st.column_config.NumberColumn(format="%.1f")
+                                                    for c in ["Error modelo %", "Error semana ant. %", "Sesgo %"]}})
+
+    st.markdown("**¿Cambiaron los datos que recibe el modelo?**")
+    mes = st.selectbox("Mes", [mes["mes"] for mes in m["meses"]][::-1], key="monitoreo-mes")
+    cambio = pd.DataFrame(next(x for x in m["meses"] if x["mes"] == mes)["cambio"])
+    if cambio.empty:
+        st.info("No hay meses equivalentes en el entrenamiento para comparar.")
+        return
+    cambio["Cambio"] = cambio.nivel.map(COLORES_NIVEL)
+    cambio["Tipo"] = cambio.es_clima.map({True: "clima", False: "uso de la red"})
+    st.dataframe(cambio.rename(columns={"variable": "Variable", "psi": "PSI", "faltantes_antes": "Sin dato antes %",
+                                        "faltantes": "Sin dato %"})[["Variable", "Tipo", "PSI", "Cambio", "Sin dato antes %", "Sin dato %"]],
+                 hide_index=True, column_config={"PSI": st.column_config.NumberColumn(format="%.2f"),
+                                                 **{c: st.column_config.NumberColumn(format="%.0f") for c in ["Sin dato antes %", "Sin dato %"]}})
+    st.caption("PSI compara la distribución del mes con la de los mismos meses del entrenamiento: menos de 0,10 es estable y 0,25 o más "
+               "es un cambio alto. Un cambio alto no es un error: dice que el modelo ve situaciones menos frecuentes que al entrenar.")
+
+
+def monitoreo_servicio() -> None:
+    st.subheader("¿El servicio anda bien?")
+    st.button("Actualizar", help="Vuelve a leer el registro de pedidos")
+    try:
+        s = api.__wrapped__("/monitoreo/servicio?dias=7&ultimos=15")  # sin caché: cambia con cada pedido
+    except ErrorApi as error:
+        st.warning(str(error))
+        return
+    total = s["total"]
+    if not total["pedidos"]:
+        st.info("No hay pedidos registrados en los últimos 7 días.")
+        return
+    for columna, (etiqueta, valor) in zip(st.columns(4), [
+            ("Pedidos (7 días)", total["pedidos"]), ("Errores del servicio", total["errores_servidor"]),
+            ("Pedidos inválidos", total["errores_cliente"]), ("95 % responde en", f"{total['ms_p95']:.0f} ms")]):
+        columna.metric(etiqueta, valor)
+    st.dataframe(pd.DataFrame(s["por_ruta"]).rename(columns={
+        "ruta": "Ruta", "pedidos": "Pedidos", "errores_cliente": "Inválidos", "errores_servidor": "Errores",
+        "ms_mediana": "Mediana (ms)", "ms_p95": "p95 (ms)"})[["Ruta", "Pedidos", "Inválidos", "Errores", "Mediana (ms)", "p95 (ms)"]],
+        hide_index=True)
+    with st.expander("Últimos pedidos"):
+        ultimos = pd.DataFrame(s["ultimos"])
+        st.dataframe(ultimos[[c for c in ["momento", "metodo", "ruta", "estado", "ms", "error", "id"] if c in ultimos]], hide_index=True)
+
+
 st.set_page_config(page_title="Rebalanceo Ecobici", layout="wide")
 st.title("Rebalanceo de Ecobici")
 st.caption("Qué estaciones abastecer o descargar antes de la franja pico, según la demanda "
@@ -226,11 +308,14 @@ with st.sidebar:
                  "viento_kmh": st.slider("Viento (km/h)", 0.0, 80.0, 15.0, 1.0)}
     st.caption(f"Datos del {fecha_minima:%d/%m/%Y} al {fecha_maxima:%d/%m/%Y}. API: {API}")
 
-planificar, datos_nuevos = st.tabs(["Planificar el rebalanceo", "Probar con datos nuevos"])
+planificar, datos_nuevos, monitoreo = st.tabs(["Planificar el rebalanceo", "Probar con datos nuevos", "Monitoreo"])
 with planificar:
     pestania_rebalanceo(salud, todas, fecha, franja, top, clima)
 with datos_nuevos:
     pestania_datos_nuevos(salud, todas, fecha)
+with monitoreo:
+    monitoreo_modelo()
+    monitoreo_servicio()
 
 with st.expander("Sobre el modelo"):
     st.markdown(f"**{modelo['descripcion']}.** Horizonte: {modelo['horizonte']}.  \n"

@@ -1,3 +1,4 @@
+import json
 from contextlib import asynccontextmanager
 from dataclasses import asdict
 from datetime import date, datetime
@@ -5,15 +6,19 @@ from typing import Annotated
 
 import pandas as pd
 from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi.exception_handlers import http_exception_handler, request_validation_exception_handler
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, model_validator
 
-from src.ecobici.modelo import (Caso, ClimaDia, DemandaReciente, EstadoDiaAnterior, FechaFueraDeRango, Franja, Predictor,
-                                SinDatos, cargar, caso_registrado, predecir_casos, predecir_dia, rebalanceo)
+from api import registro
+from src.ecobici.modelo import (ARCHIVO_MONITOREO, RUTA_MODELOS, Caso, ClimaDia, DemandaReciente, EstadoDiaAnterior,
+                                FechaFueraDeRango, Franja, Predictor, SinDatos, cargar, caso_registrado, predecir_casos, predecir_dia, rebalanceo)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    registro.preparar()
     app.state.predictor = cargar()
     yield
 
@@ -22,18 +27,35 @@ app = FastAPI(
     title="Ecobici: demanda por estación",
     description="Predice retiros y arribos por estación y hora para un día, y arma las listas de "
                 "estaciones a abastecer o descargar antes de una franja pico.",
-    version="1.1.0",
+    version="1.2.0",
     lifespan=lifespan,
 )
 
 
+app.middleware("http")(registro.middleware)
+
+
+@app.exception_handler(HTTPException)
+async def error_http(request: Request, error: HTTPException):
+    registro.anotar(request, error=str(error.detail))
+    return await http_exception_handler(request, error)
+
+
+@app.exception_handler(RequestValidationError)
+async def pedido_invalido(request: Request, error: RequestValidationError):
+    registro.anotar(request, error="; ".join(f"{'.'.join(map(str, e['loc']))}: {e['msg']}" for e in error.errors()))
+    return await request_validation_exception_handler(request, error)
+
+
 @app.exception_handler(FechaFueraDeRango)
 async def fecha_fuera_de_rango(request: Request, error: FechaFueraDeRango):
+    registro.anotar(request, error=str(error))
     return JSONResponse(status_code=404, content={"detail": str(error)})
 
 
 @app.exception_handler(SinDatos)
 async def sin_datos(request: Request, error: SinDatos):
+    registro.anotar(request, error=str(error))
     return JSONResponse(status_code=404, content={"detail": str(error)})
 
 
@@ -188,6 +210,65 @@ class RespuestaCasos(BaseModel):
     resultados: list[ResultadoCaso] = Field(description="En el mismo orden que los casos")
 
 
+class CambioVariable(BaseModel):
+    variable: str
+    psi: float = Field(description="Population Stability Index contra los mismos meses del entrenamiento")
+    nivel: str = Field(description="estable (< 0,10), leve o alto (≥ 0,25)")
+    es_clima: bool
+    faltantes_antes: float = Field(description="% sin dato en los mismos meses del entrenamiento")
+    faltantes: float = Field(description="% sin dato en el mes")
+
+
+class ErrorPeriodo(BaseModel):
+    dias: int
+    estaciones: int
+    retiros_por_dia: float
+    wape: float = Field(description="WAPE diario por estación del modelo, en %")
+    wape_semana_anterior: float = Field(description="El mismo error repitiendo la semana anterior")
+    sesgo: float = Field(description="Total predicho contra el real, en %")
+
+
+class ErrorMes(ErrorPeriodo):
+    mes: str
+    referencia: bool = Field(description="Si el mes es del test con el que se aprobó el modelo")
+    estaciones_nuevas: int = Field(description="Estaciones que no estaban en el entrenamiento")
+    cambio: list[CambioVariable]
+    avisos: list[str]
+
+
+class ErrorSemana(ErrorPeriodo):
+    semana: date
+
+
+class MonitoreoModelo(BaseModel):
+    calculado: datetime
+    fin_entrenamiento: date
+    ultima_fecha: date
+    peor_wape_referencia: float
+    modelo_vigente: bool = Field(description="Si el monitoreo corresponde al modelo cargado en la API")
+    meses: list[ErrorMes]
+    semanas: list[ErrorSemana]
+
+
+class Uso(BaseModel):
+    pedidos: int
+    errores_cliente: int = Field(description="Respuestas 4xx")
+    errores_servidor: int = Field(description="Respuestas 5xx")
+    ms_mediana: float | None
+    ms_p95: float | None
+
+
+class UsoRuta(Uso):
+    ruta: str
+
+
+class MonitoreoServicio(BaseModel):
+    desde: datetime
+    total: Uso
+    por_ruta: list[UsoRuta]
+    ultimos: list[dict] = Field(description="Últimos pedidos, del más nuevo al más viejo")
+
+
 class PedidoRebalanceo(BaseModel):
     fecha: date = Field(description="Día a planificar (AAAA-MM-DD)", examples=["2026-06-02"])
     franja: Franja = Field(description="manana: 6 a 9 h · tarde: 16 a 19 h")
@@ -238,12 +319,14 @@ def estaciones(request: Request):
 @app.post("/prediccion", response_model=RespuestaPrediccion, summary="Demanda por estación y hora de un día")
 def prediccion(pedido: PedidoPrediccion, request: Request):
     p = predictor(request)
+    registro.anotar(request, pedido=pedido.model_dump(mode="json"))
     verificar_estaciones(p, pedido.station_ids or [])
     pred = predecir_dia(p, pedido.fecha, pedido.clima.dominio() if pedido.clima else None)
     if pedido.station_ids:
         pred = pred[pred.station_id.isin(pedido.station_ids)]
     columnas = ["pred_retiros", "pred_arribos", "pred_glm", "retiros", "arribos"]
     totales = pred[columnas].sum(min_count=1)
+    registro.anotar(request, respuesta=registros(totales.to_frame().T)[0])
     return RespuestaPrediccion(fecha=pedido.fecha, clima=pedido.clima, en_entrenamiento=p.en_entrenamiento(pedido.fecha),
                                totales=Totales(**registros(totales.to_frame().T)[0]),
                                filas=registros(pred))
@@ -253,8 +336,10 @@ def prediccion(pedido: PedidoPrediccion, request: Request):
           summary="Demanda de casos nuevos, con los datos que manda el usuario")
 def prediccion_casos(pedido: PedidoCasos, request: Request):
     p = predictor(request)
+    registro.anotar(request, pedido={"casos": len(pedido.casos), "primero": pedido.casos[0].model_dump(mode="json")})
     verificar_estaciones(p, [c.station_id for c in pedido.casos if c.station_id is not None])
     pred = predecir_casos(p, [c.dominio(p) for c in pedido.casos])
+    registro.anotar(request, respuesta=pred.sum().round(3).to_dict())
     return RespuestaCasos(resultados=[
         ResultadoCaso(station_id=c.station_id, fecha=c.fecha, hora=c.hora, pred_retiros=retiros, pred_arribos=arribos,
                       flujo_neto=arribos - retiros)
@@ -275,8 +360,11 @@ def caso(station_id: int, fecha: date, request: Request, hora: Annotated[int, Qu
           summary="Estaciones a abastecer y a descargar antes de una franja pico")
 def rebalancear(pedido: PedidoRebalanceo, request: Request):
     p = predictor(request)
+    registro.anotar(request, pedido=pedido.model_dump(mode="json"))
     pred = predecir_dia(p, pedido.fecha, pedido.clima.dominio() if pedido.clima else None)
     r = rebalanceo(p, pred, pedido.franja, pedido.top)
+    registro.anotar(request, respuesta={"precision_abastecer": r.precision_abastecer, "precision_descargar": r.precision_descargar,
+                                        "abastecer": r.abastecer.index.tolist(), "descargar": r.descargar.index.tolist()})
     return RespuestaRebalanceo(fecha=pedido.fecha, franja=pedido.franja, horas=list(pedido.franja.horas),
                                abastecer=registros(r.abastecer.reset_index()),
                                descargar=registros(r.descargar.reset_index()),
@@ -284,3 +372,18 @@ def rebalancear(pedido: PedidoRebalanceo, request: Request):
                                precision_descargar=r.precision_descargar,
                                promedio_abastecer=r.promedio_abastecer, promedio_descargar=r.promedio_descargar,
                                en_entrenamiento=p.en_entrenamiento(pedido.fecha))
+
+
+@app.get("/monitoreo/servicio", response_model=MonitoreoServicio, summary="Pedidos, errores y latencia de los últimos días")
+def monitoreo_servicio(dias: Annotated[int, Query(ge=1, le=registro.DIAS_A_CONSERVAR)] = 7,
+                       ultimos: Annotated[int, Query(ge=0, le=200)] = 20):
+    return registro.resumen(dias, ultimos)
+
+
+@app.get("/monitoreo/modelo", response_model=MonitoreoModelo, summary="Error por mes y cambio en los datos desde el entrenamiento")
+def monitoreo_modelo(request: Request):
+    ruta = RUTA_MODELOS / ARCHIVO_MONITOREO
+    if not ruta.exists():
+        raise HTTPException(404, "Todavía no se calculó el monitoreo: correr scripts/monitorear_modelo.py.")
+    datos = json.loads(ruta.read_text(encoding="utf-8"))
+    return datos | {"modelo_vigente": datos["modelo_entrenado"] == predictor(request).meta["entrenado"]}
