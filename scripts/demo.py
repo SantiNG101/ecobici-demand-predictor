@@ -41,7 +41,7 @@ def levantar(local: bool) -> list[subprocess.Popen]:
         subprocess.run(["docker", "compose", "up", "--build", "-d"], cwd=REPO_DIR, check=True)
         return []
     return [subprocess.Popen([sys.executable, "-m", "uvicorn", "api.main:app", "--log-level", "warning"], cwd=REPO_DIR),
-            subprocess.Popen([sys.executable, "-m", "streamlit", "run", "interfaz/app.py", "--server.headless=true",
+            subprocess.Popen([sys.executable, "-m", "streamlit", "run", "interfaz/app.py", "--server.headless=true", "--server.address=localhost",
                               "--browser.gatherUsageStats=false"], cwd=REPO_DIR)]
 
 
@@ -96,6 +96,7 @@ def recorrido() -> None:
 
 
 def main() -> None:
+    sys.stdout.reconfigure(line_buffering=True)  # para que el avance se vea aunque la salida vaya a un archivo
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     modo = parser.add_mutually_exclusive_group()
     modo.add_argument("--local", action="store_true", help="sin Docker")
