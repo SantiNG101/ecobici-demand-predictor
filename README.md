@@ -110,11 +110,13 @@ BA Data publica los viajes con demora: el zip de 2026 se actualizó el 07/10 con
 
 | Método y ruta | Entrada | Salida |
 |---|---|---|
-| `GET /salud` | — | Estado, fecha de entrenamiento y rango de fechas que se pueden predecir |
+| `GET /salud` | — | Estado, fecha de entrenamiento, rango de fechas que se pueden predecir y último día que vio el modelo al entrenar |
 | `GET /modelo` | — | Descripción, horizonte, variables, métricas de test, clima esperado y versiones |
 | `GET /estaciones` | — | Id, nombre, latitud, longitud y grupo de cada estación |
+| `POST /prediccion/casos` | `casos`: de 1 a 1000 estaciones-hora con la ubicación, la fecha, el clima y la demanda reciente | Retiros y arribos esperados y flujo neto de cada caso |
+| `GET /estaciones/{id}/caso` | `fecha`, `hora` | Un caso registrado, listo para editar y mandar a `/prediccion/casos` |
 | `POST /prediccion` | `fecha`, `clima` (opcional), `station_ids` (opcional) | Retiros y arribos predichos y reales por estación y hora, y los totales del día |
-| `POST /rebalanceo` | `fecha`, `franja` (`manana` o `tarde`), `top` (1 a 50, por defecto 15), `clima` (opcional) | Las dos listas ordenadas con el flujo neto predicho y el real, y la precisión contra lo que pasó |
+| `POST /rebalanceo` | `fecha`, `franja` (`manana` o `tarde`), `top` (1 a 50, por defecto 15), `clima` (opcional) | Las dos listas ordenadas con el flujo neto predicho y el real, la precisión contra lo que pasó, la precisión promedio de la franja y si el día es de entrenamiento |
 
 Ejemplo:
 
@@ -129,11 +131,27 @@ curl -X POST localhost:8000/rebalanceo -H "content-type: application/json" \
   "abastecer": [{"station_id": 175, "nombre": "147 - Constitución", "nombre_grupo": "Residencial (origen a la mañana)",
                  "lat": -34.6269, "lon": -58.3807, "flujo_predicho": -18.97, "flujo_real": -37}, "..."],
   "descargar": [{"station_id": 26, "nombre": "026 - JUANA MANSO I", "flujo_predicho": 19.44, "flujo_real": 19, "...": "..."}],
-  "precision_abastecer": 0.2, "precision_descargar": 0.533
+  "precision_abastecer": 0.2, "precision_descargar": 0.533,
+  "promedio_abastecer": 0.3763, "promedio_descargar": 0.4968, "en_entrenamiento": false
 }
 ```
 
-`clima` tiene `temperatura_c`, `precipitacion_mm` (lluvia por hora) y `viento_kmh`, y reemplaza el clima registrado en las 24 horas del día. Sirve para cargar un pronóstico o probar escenarios. Errores: un cuerpo inválido devuelve 422, y una fecha fuera del rango o una estación desconocida devuelven 404 con el motivo. Si faltan los modelos o el dataset, la API no arranca y el error dice qué archivo falta.
+**Datos nuevos.** `POST /prediccion/casos` predice con los datos que manda el usuario y no lee el dataset: acepta una fecha futura, otro clima, otra demanda o una estación que todavía no existe (`lat` y `lon` en lugar de `station_id`). El estado de la estación el día anterior es opcional.
+
+```bash
+curl -X POST localhost:8000/prediccion/casos -H "content-type: application/json" -d '{"casos": [{
+  "station_id": 175, "fecha": "2026-12-01", "hora": 8,
+  "clima": {"temperatura_c": 22, "precipitacion_mm": 0, "viento_kmh": 10},
+  "retiros": {"ayer_misma_hora": 6, "semana_anterior_misma_hora": 6, "promedio_7d_misma_hora": 5.4, "total_dia_anterior": 45, "promedio_diario_28d": 50},
+  "arribos": {"ayer_misma_hora": 2, "semana_anterior_misma_hora": 3, "promedio_7d_misma_hora": 1.6, "total_dia_anterior": 40, "promedio_diario_28d": 53}}]}'
+```
+
+```json
+{"resultados": [{"station_id": 175, "fecha": "2026-12-01", "hora": 8,
+  "pred_retiros": 6.08, "pred_arribos": 1.89, "flujo_neto": -4.19}]}
+```
+
+`clima` tiene `temperatura_c`, `precipitacion_mm` (lluvia por hora) y `viento_kmh`, y reemplaza el clima registrado en las 24 horas del día. Sirve para cargar un pronóstico o probar escenarios. Errores: un cuerpo inválido devuelve 422, y una fecha fuera del rango, una estación desconocida o un caso sin datos devuelven 404 con el motivo. Si faltan los modelos o el dataset, la API no arranca y el error dice qué archivo falta.
 
 ### Decisiones y límites
 
@@ -141,6 +159,8 @@ curl -X POST localhost:8000/rebalanceo -H "content-type: application/json" \
 - **En producción** la grilla del día siguiente se armaría con las fotos en vivo del feed GBFS, los viajes del día anterior y el pronóstico del clima. La consulta SQL y los modelos no cambian. Hoy ese pronóstico se puede cargar a mano con `clima`.
 - **Las variables se arman con la misma consulta del entrenamiento**, leída de `metadata.json`. Se le pasa sólo el tramo del dataset que necesita (los 29 días previos y el día), lo que da las mismas variables y lleva una predicción de 24 s a menos de medio segundo.
 - **Las listas coinciden con el ejemplo de la sección 12.1** para la mañana del 02/06/2026. Los tests lo verifican. Una predicción o un rebalanceo tarda 0,4 s.
+- **Los aciertos se miden sólo en días que el modelo no vio.** Se entrenó hasta el 31/05/2026, así que hasta ese día el acierto sale inflado: la API lo marca con `en_entrenamiento` y el tablero avisa y no lo muestra.
+- **El acierto de un día se compara con el promedio** de los 62 días hábiles de junio a agosto de 2026. Lo calcula `python scripts/evaluar_rebalanceo.py`, que guarda `models/precision_rebalanceo.json`. Si se reentrena el modelo, hay que volver a correrlo. Sin ese archivo la API funciona igual y el promedio queda en `null`.
 - **Para ordenar estaciones, el modelo empata con la media histórica** (sección 12.1 del notebook 04). Su aporte está en estimar cuántas bicis mover.
 
 ## Fuentes
