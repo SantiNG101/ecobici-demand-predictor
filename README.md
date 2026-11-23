@@ -87,7 +87,7 @@ Con Docker, la misma imagen corre los dos servicios y monta `models/` y `data/pr
 docker compose up --build
 ```
 
-Variables de entorno: `ECOBICI_MODELS_DIR` (por defecto `models`), `ECOBICI_DATA_DIR` (por defecto `data/processed`, con `dataset_estacion_hora.parquet` y `estaciones.csv`) y `ECOBICI_API_URL` para la interfaz (por defecto `http://localhost:8000`).
+Variables de entorno: `ECOBICI_MODELS_DIR` (por defecto `models`), `ECOBICI_DATA_DIR` (por defecto `data/processed`, con `dataset_estacion_hora.parquet` y `estaciones.csv`), `ECOBICI_LOGS_DIR` (por defecto `logs`) y `ECOBICI_API_URL` para la interfaz (por defecto `http://localhost:8000`).
 
 ### Actualizar los datos
 
@@ -113,6 +113,8 @@ BA Data publica los viajes con demora: el zip de 2026 se actualizó el 07/10 con
 | `GET /salud` | — | Estado, fecha de entrenamiento, rango de fechas que se pueden predecir y último día que vio el modelo al entrenar |
 | `GET /modelo` | — | Descripción, horizonte, variables, métricas de test, clima esperado y versiones |
 | `GET /estaciones` | — | Id, nombre, latitud, longitud y grupo de cada estación |
+| `GET /monitoreo/servicio` | `dias` (1 a 30), `ultimos` | Pedidos, errores y latencia por ruta, y los últimos pedidos |
+| `GET /monitoreo/modelo` | — | Error por mes y semana desde el entrenamiento, cambio en los datos y avisos |
 | `POST /prediccion/casos` | `casos`: de 1 a 1000 estaciones-hora con la ubicación, la fecha, el clima y la demanda reciente | Retiros y arribos esperados y flujo neto de cada caso |
 | `GET /estaciones/{id}/caso` | `fecha`, `hora` | Un caso registrado, listo para editar y mandar a `/prediccion/casos` |
 | `POST /prediccion` | `fecha`, `clima` (opcional), `station_ids` (opcional) | Retiros y arribos predichos y reales por estación y hora, y los totales del día |
@@ -152,6 +154,35 @@ curl -X POST localhost:8000/prediccion/casos -H "content-type: application/json"
 ```
 
 `clima` tiene `temperatura_c`, `precipitacion_mm` (lluvia por hora) y `viento_kmh`, y reemplaza el clima registrado en las 24 horas del día. Sirve para cargar un pronóstico o probar escenarios. Errores: un cuerpo inválido devuelve 422, y una fecha fuera del rango, una estación desconocida o un caso sin datos devuelven 404 con el motivo. Si faltan los modelos o el dataset, la API no arranca y el error dice qué archivo falta.
+
+### Registro y monitoreo
+
+**Registro de pedidos.** La API guarda una línea JSON por pedido en `logs/api-AAAA-MM-DD.jsonl`: momento, ruta, datos del pedido, resumen de la respuesta, estado, duración y el motivo si falló. Cada respuesta lleva su identificador en la cabecera `X-Pedido-Id`. No guarda la IP ni las cabeceras, no registra `/salud`, y borra los archivos de más de 30 días. Si no puede escribir, la API responde igual. La carpeta se cambia con `ECOBICI_LOGS_DIR`.
+
+**Monitoreo del modelo.** `python scripts/monitorear_modelo.py` (unos 100 s) compara las predicciones con los viajes reales desde que terminó el entrenamiento y guarda `models/monitoreo.json`, que se ve en la pestaña **Monitoreo**. Se corre después de actualizar los datos:
+
+- **Error por mes y semana**, al lado del de repetir la semana anterior.
+- **Cambio en los datos (PSI):** cada mes contra los mismos meses del entrenamiento, para no confundirlo con la estacionalidad.
+- **Avisos** en los meses posteriores al test: si el error supera en más de 10 % al peor mes del test, si el total se aparta más de 10 %, o si no le gana a la semana anterior. Con avisos, el script termina con código 1.
+
+Con los datos hasta el 30/09/2026:
+
+| Mes | Error del modelo | Semana anterior | Sesgo |
+|---|---|---|---|
+| Junio a agosto (test) | 29,2 · 30,7 · 27,4 % | 44,4 · 50,4 · 43,4 % | −0,3 · +1,0 · +0,6 % |
+| **Septiembre (no visto antes)** | **20,5 %** | 28,1 % | +3,7 % |
+
+Septiembre es el primer mes fuera del invierno: el error baja con el aumento de los viajes y queda cerca del de la validación cruzada (23,0 %). El cambio alto de las variables de estado en junio a agosto es porque los inviernos anteriores tienen huecos de fotos (35 a 65 % sin dato), no porque cambiara la red. El viento medido baja de forma sostenida desde diciembre de 2024 (unos 15 a 11 km/h de promedio): puede ser un cambio de la fuente y no se verificó.
+
+Los umbrales son una elección nuestra y son fáciles de cambiar en `src/ecobici/monitoreo.py`. El monitoreo usa clima observado, como el entrenamiento. Las rutas de monitoreo no piden contraseña: si la API se publica, conviene cerrarlas.
+
+### Demo
+
+```bash
+python scripts/demo.py     # opciones: --local (sin Docker), --solo-verificar, --sin-navegador
+```
+
+Levanta la API y el tablero, espera que respondan, verifica cada paso del recorrido y muestra los números que se van a ver: el plan de un día, datos nuevos con lluvia o feriado, casos límite y monitoreo. Si algo falla, dice qué.
 
 ### Decisiones y límites
 

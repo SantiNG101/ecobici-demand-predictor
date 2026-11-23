@@ -21,6 +21,7 @@ RUTA_DATOS = REPO_DIR / os.environ.get("ECOBICI_DATA_DIR", "data/processed")
 
 ARCHIVO_DATASET = "dataset_estacion_hora.parquet"
 ARCHIVO_PRECISION = "precision_rebalanceo.json"  # lo genera scripts/evaluar_rebalanceo.py; es opcional
+ARCHIVO_MONITOREO = "monitoreo.json"  # lo genera scripts/monitorear_modelo.py; es opcional
 DIAS_PREVIOS = 29  # la ventana más larga de la consulta es de 28 días antes del día anterior
 ZONA = "America/Argentina/Buenos_Aires"
 
@@ -115,11 +116,11 @@ class Rebalanceo:
     promedio_descargar: float | None
 
 
-def _conexion() -> duckdb.DuckDBPyConnection:
-    conexion = duckdb.connect()
-    conexion.execute("SET enable_progress_bar = false")
-    conexion.execute(f"SET TimeZone = '{ZONA}'")
-    return conexion
+def conexion() -> duckdb.DuckDBPyConnection:
+    con = duckdb.connect()
+    con.execute("SET enable_progress_bar = false")
+    con.execute(f"SET TimeZone = '{ZONA}'")
+    return con
 
 
 def cargar(dir_modelos: Path = RUTA_MODELOS, dir_datos: Path = RUTA_DATOS) -> Predictor:
@@ -143,8 +144,8 @@ def cargar(dir_modelos: Path = RUTA_MODELOS, dir_datos: Path = RUTA_DATOS) -> Pr
     estaciones = pd.read_csv(archivos["estaciones"], index_col="station_id").join(grupos).sort_index()
     estaciones["grupo"] = estaciones.grupo.astype("Int64")
 
-    with _conexion() as conexion:
-        primera, ultima = conexion.execute(
+    with conexion() as con:
+        primera, ultima = con.execute(
             f"SELECT min(CAST(timezone('{ZONA}', hora_local) AS DATE)), "
             f"max(CAST(timezone('{ZONA}', hora_local) AS DATE)) FROM read_parquet(?)",
             [str(archivos["dataset"])]).fetchone()
@@ -173,14 +174,14 @@ def _variables(p: Predictor, fecha: date) -> pd.DataFrame:
     # dan lo mismo que sobre todo el dataset, y para fechas viejas es 25 veces más rápido.
     desde = fecha - timedelta(days=DIAS_PREVIOS)
     hasta = fecha + timedelta(days=1)
-    with _conexion() as conexion, tempfile.TemporaryDirectory() as carpeta:
+    with conexion() as con, tempfile.TemporaryDirectory() as carpeta:
         tramo = Path(carpeta) / ARCHIVO_DATASET
-        conexion.execute(
+        con.execute(
             f"COPY (SELECT * FROM read_parquet('{p.dataset.as_posix()}') "
             f"WHERE hora_local >= TIMESTAMPTZ '{desde}' AND hora_local < TIMESTAMPTZ '{hasta}') "
             f"TO '{tramo.as_posix()}' (FORMAT parquet)")
         consulta = p.meta["consulta_variables"].format(fuente=tramo.as_posix(), desde=desde)
-        return conexion.execute(f"SELECT * FROM ({consulta}) WHERE ts >= ? AND ts < ?",
+        return con.execute(f"SELECT * FROM ({consulta}) WHERE ts >= ? AND ts < ?",
                                 [pd.Timestamp(fecha).to_pydatetime(), pd.Timestamp(hasta).to_pydatetime()]).df()
 
 

@@ -1,0 +1,699 @@
+{
+ "calculado": "2026-11-23T12:56:17",
+ "fin_entrenamiento": "2026-05-31",
+ "ultima_fecha": "2026-09-30",
+ "modelo_entrenado": "2026-11-03T17:13:48",
+ "peor_wape_referencia": 30.68,
+ "meses": [
+  {
+   "mes": "2026-06",
+   "referencia": true,
+   "dias": 30.0,
+   "estaciones": 395.0,
+   "retiros": 193254.0,
+   "retiros_por_dia": 6441.8,
+   "wape": 29.17,
+   "wape_semana_anterior": 44.36,
+   "sesgo": -0.32,
+   "estaciones_nuevas": 0,
+   "cambio": [
+    {
+     "variable": "prop_vacia_dia_ant",
+     "psi": 2.918,
+     "nivel": "alto",
+     "es_clima": false,
+     "faltantes_antes": 47.2,
+     "faltantes": 0.2
+    },
+    {
+     "variable": "bicis_rotas_dia_ant",
+     "psi": 2.905,
+     "nivel": "alto",
+     "es_clima": false,
+     "faltantes_antes": 47.2,
+     "faltantes": 0.2
+    },
+    {
+     "variable": "pct_capacidad_rota_dia_ant",
+     "psi": 2.829,
+     "nivel": "alto",
+     "es_clima": false,
+     "faltantes_antes": 47.2,
+     "faltantes": 0.2
+    },
+    {
+     "variable": "capacidad_util_dia_ant",
+     "psi": 2.803,
+     "nivel": "alto",
+     "es_clima": false,
+     "faltantes_antes": 47.2,
+     "faltantes": 0.2
+    },
+    {
+     "variable": "prop_llena_dia_ant",
+     "psi": 2.766,
+     "nivel": "alto",
+     "es_clima": false,
+     "faltantes_antes": 47.2,
+     "faltantes": 0.2
+    },
+    {
+     "variable": "viento_kmh",
+     "psi": 1.141,
+     "nivel": "alto",
+     "es_clima": true,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "temperatura_c",
+     "psi": 0.231,
+     "nivel": "leve",
+     "es_clima": true,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "ret_media_28d",
+     "psi": 0.067,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "arr_media_28d",
+     "psi": 0.065,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "arr_dia_anterior",
+     "psi": 0.06,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "ret_dia_anterior",
+     "psi": 0.058,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "ret_misma_hora_7d",
+     "psi": 0.019,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "arr_misma_hora_7d",
+     "psi": 0.018,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "precipitacion_mm",
+     "psi": 0.0,
+     "nivel": "estable",
+     "es_clima": true,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    }
+   ],
+   "avisos": []
+  },
+  {
+   "mes": "2026-07",
+   "referencia": true,
+   "dias": 31.0,
+   "estaciones": 396.0,
+   "retiros": 183836.0,
+   "retiros_por_dia": 5930.19,
+   "wape": 30.68,
+   "wape_semana_anterior": 50.37,
+   "sesgo": 0.97,
+   "estaciones_nuevas": 1,
+   "cambio": [
+    {
+     "variable": "prop_vacia_dia_ant",
+     "psi": 4.379,
+     "nivel": "alto",
+     "es_clima": false,
+     "faltantes_antes": 65.5,
+     "faltantes": 0.3
+    },
+    {
+     "variable": "bicis_rotas_dia_ant",
+     "psi": 4.375,
+     "nivel": "alto",
+     "es_clima": false,
+     "faltantes_antes": 65.5,
+     "faltantes": 0.3
+    },
+    {
+     "variable": "pct_capacidad_rota_dia_ant",
+     "psi": 4.327,
+     "nivel": "alto",
+     "es_clima": false,
+     "faltantes_antes": 65.5,
+     "faltantes": 0.3
+    },
+    {
+     "variable": "capacidad_util_dia_ant",
+     "psi": 4.31,
+     "nivel": "alto",
+     "es_clima": false,
+     "faltantes_antes": 65.5,
+     "faltantes": 0.3
+    },
+    {
+     "variable": "prop_llena_dia_ant",
+     "psi": 4.261,
+     "nivel": "alto",
+     "es_clima": false,
+     "faltantes_antes": 65.5,
+     "faltantes": 0.3
+    },
+    {
+     "variable": "arr_media_28d",
+     "psi": 0.132,
+     "nivel": "leve",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "ret_media_28d",
+     "psi": 0.13,
+     "nivel": "leve",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "viento_kmh",
+     "psi": 0.096,
+     "nivel": "estable",
+     "es_clima": true,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "temperatura_c",
+     "psi": 0.089,
+     "nivel": "estable",
+     "es_clima": true,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "precipitacion_mm",
+     "psi": 0.083,
+     "nivel": "estable",
+     "es_clima": true,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "arr_dia_anterior",
+     "psi": 0.027,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "ret_dia_anterior",
+     "psi": 0.025,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "ret_misma_hora_7d",
+     "psi": 0.016,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "arr_misma_hora_7d",
+     "psi": 0.015,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    }
+   ],
+   "avisos": []
+  },
+  {
+   "mes": "2026-08",
+   "referencia": true,
+   "dias": 31.0,
+   "estaciones": 395.0,
+   "retiros": 201591.0,
+   "retiros_por_dia": 6502.94,
+   "wape": 27.43,
+   "wape_semana_anterior": 43.39,
+   "sesgo": 0.57,
+   "estaciones_nuevas": 1,
+   "cambio": [
+    {
+     "variable": "prop_vacia_dia_ant",
+     "psi": 1.837,
+     "nivel": "alto",
+     "es_clima": false,
+     "faltantes_antes": 34.6,
+     "faltantes": 0.4
+    },
+    {
+     "variable": "pct_capacidad_rota_dia_ant",
+     "psi": 1.806,
+     "nivel": "alto",
+     "es_clima": false,
+     "faltantes_antes": 34.6,
+     "faltantes": 0.4
+    },
+    {
+     "variable": "bicis_rotas_dia_ant",
+     "psi": 1.797,
+     "nivel": "alto",
+     "es_clima": false,
+     "faltantes_antes": 34.6,
+     "faltantes": 0.4
+    },
+    {
+     "variable": "prop_llena_dia_ant",
+     "psi": 1.787,
+     "nivel": "alto",
+     "es_clima": false,
+     "faltantes_antes": 34.6,
+     "faltantes": 0.4
+    },
+    {
+     "variable": "capacidad_util_dia_ant",
+     "psi": 1.733,
+     "nivel": "alto",
+     "es_clima": false,
+     "faltantes_antes": 34.6,
+     "faltantes": 0.4
+    },
+    {
+     "variable": "viento_kmh",
+     "psi": 0.77,
+     "nivel": "alto",
+     "es_clima": true,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "temperatura_c",
+     "psi": 0.228,
+     "nivel": "leve",
+     "es_clima": true,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "ret_media_28d",
+     "psi": 0.095,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "arr_media_28d",
+     "psi": 0.076,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "ret_dia_anterior",
+     "psi": 0.07,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "arr_dia_anterior",
+     "psi": 0.068,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "ret_misma_hora_7d",
+     "psi": 0.022,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "arr_misma_hora_7d",
+     "psi": 0.02,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "precipitacion_mm",
+     "psi": 0.003,
+     "nivel": "estable",
+     "es_clima": true,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    }
+   ],
+   "avisos": []
+  },
+  {
+   "mes": "2026-09",
+   "referencia": false,
+   "dias": 30.0,
+   "estaciones": 395.0,
+   "retiros": 265854.0,
+   "retiros_por_dia": 8861.8,
+   "wape": 20.54,
+   "wape_semana_anterior": 28.1,
+   "sesgo": 3.69,
+   "estaciones_nuevas": 1,
+   "cambio": [
+    {
+     "variable": "temperatura_c",
+     "psi": 0.223,
+     "nivel": "leve",
+     "es_clima": true,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "viento_kmh",
+     "psi": 0.181,
+     "nivel": "leve",
+     "es_clima": true,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "bicis_rotas_dia_ant",
+     "psi": 0.083,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.7,
+     "faltantes": 0.1
+    },
+    {
+     "variable": "pct_capacidad_rota_dia_ant",
+     "psi": 0.064,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.7,
+     "faltantes": 0.1
+    },
+    {
+     "variable": "prop_vacia_dia_ant",
+     "psi": 0.061,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.7,
+     "faltantes": 0.1
+    },
+    {
+     "variable": "prop_llena_dia_ant",
+     "psi": 0.045,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.7,
+     "faltantes": 0.1
+    },
+    {
+     "variable": "arr_dia_anterior",
+     "psi": 0.034,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "ret_dia_anterior",
+     "psi": 0.033,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "ret_media_28d",
+     "psi": 0.032,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "arr_media_28d",
+     "psi": 0.028,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "capacidad_util_dia_ant",
+     "psi": 0.025,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.7,
+     "faltantes": 0.1
+    },
+    {
+     "variable": "ret_misma_hora_7d",
+     "psi": 0.011,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "arr_misma_hora_7d",
+     "psi": 0.009,
+     "nivel": "estable",
+     "es_clima": false,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    },
+    {
+     "variable": "precipitacion_mm",
+     "psi": 0.006,
+     "nivel": "estable",
+     "es_clima": true,
+     "faltantes_antes": 0.0,
+     "faltantes": 0.0
+    }
+   ],
+   "avisos": []
+  }
+ ],
+ "semanas": [
+  {
+   "semana": "2026-06-01",
+   "dias": 7.0,
+   "estaciones": 395.0,
+   "retiros": 52660.0,
+   "retiros_por_dia": 7522.86,
+   "wape": 25.37,
+   "wape_semana_anterior": 37.93,
+   "sesgo": 6.17
+  },
+  {
+   "semana": "2026-06-08",
+   "dias": 7.0,
+   "estaciones": 395.0,
+   "retiros": 38949.0,
+   "retiros_por_dia": 5564.14,
+   "wape": 39.98,
+   "wape_semana_anterior": 59.33,
+   "sesgo": 12.91
+  },
+  {
+   "semana": "2026-06-15",
+   "dias": 7.0,
+   "estaciones": 395.0,
+   "retiros": 37951.0,
+   "retiros_por_dia": 5421.57,
+   "wape": 31.27,
+   "wape_semana_anterior": 48.55,
+   "sesgo": -6.24
+  },
+  {
+   "semana": "2026-06-22",
+   "dias": 7.0,
+   "estaciones": 395.0,
+   "retiros": 46636.0,
+   "retiros_por_dia": 6662.29,
+   "wape": 25.25,
+   "wape_semana_anterior": 41.65,
+   "sesgo": -10.69
+  },
+  {
+   "semana": "2026-06-29",
+   "dias": 7.0,
+   "estaciones": 395.0,
+   "retiros": 42605.0,
+   "retiros_por_dia": 6086.43,
+   "wape": 25.47,
+   "wape_semana_anterior": 36.52,
+   "sesgo": 0.28
+  },
+  {
+   "semana": "2026-07-06",
+   "dias": 7.0,
+   "estaciones": 395.0,
+   "retiros": 35732.0,
+   "retiros_por_dia": 5104.57,
+   "wape": 33.28,
+   "wape_semana_anterior": 53.05,
+   "sesgo": -2.31
+  },
+  {
+   "semana": "2026-07-13",
+   "dias": 7.0,
+   "estaciones": 396.0,
+   "retiros": 45321.0,
+   "retiros_por_dia": 6474.43,
+   "wape": 28.25,
+   "wape_semana_anterior": 44.43,
+   "sesgo": -3.49
+  },
+  {
+   "semana": "2026-07-20",
+   "dias": 7.0,
+   "estaciones": 395.0,
+   "retiros": 37466.0,
+   "retiros_por_dia": 5352.29,
+   "wape": 41.67,
+   "wape_semana_anterior": 61.13,
+   "sesgo": 10.05
+  },
+  {
+   "semana": "2026-07-27",
+   "dias": 7.0,
+   "estaciones": 395.0,
+   "retiros": 45669.0,
+   "retiros_por_dia": 6524.14,
+   "wape": 25.95,
+   "wape_semana_anterior": 52.67,
+   "sesgo": 0.74
+  },
+  {
+   "semana": "2026-08-03",
+   "dias": 7.0,
+   "estaciones": 395.0,
+   "retiros": 38140.0,
+   "retiros_por_dia": 5448.57,
+   "wape": 33.61,
+   "wape_semana_anterior": 54.4,
+   "sesgo": 11.33
+  },
+  {
+   "semana": "2026-08-10",
+   "dias": 7.0,
+   "estaciones": 395.0,
+   "retiros": 42602.0,
+   "retiros_por_dia": 6086.0,
+   "wape": 29.41,
+   "wape_semana_anterior": 41.7,
+   "sesgo": 4.43
+  },
+  {
+   "semana": "2026-08-17",
+   "dias": 7.0,
+   "estaciones": 395.0,
+   "retiros": 47422.0,
+   "retiros_por_dia": 6774.57,
+   "wape": 25.51,
+   "wape_semana_anterior": 43.03,
+   "sesgo": -9.02
+  },
+  {
+   "semana": "2026-08-24",
+   "dias": 7.0,
+   "estaciones": 395.0,
+   "retiros": 57144.0,
+   "retiros_por_dia": 8163.43,
+   "wape": 22.71,
+   "wape_semana_anterior": 38.4,
+   "sesgo": -3.9
+  },
+  {
+   "semana": "2026-08-31",
+   "dias": 7.0,
+   "estaciones": 395.0,
+   "retiros": 60146.0,
+   "retiros_por_dia": 8592.29,
+   "wape": 20.69,
+   "wape_semana_anterior": 30.67,
+   "sesgo": -0.33
+  },
+  {
+   "semana": "2026-09-07",
+   "dias": 7.0,
+   "estaciones": 395.0,
+   "retiros": 58756.0,
+   "retiros_por_dia": 8393.71,
+   "wape": 21.02,
+   "wape_semana_anterior": 29.26,
+   "sesgo": 3.28
+  },
+  {
+   "semana": "2026-09-14",
+   "dias": 7.0,
+   "estaciones": 395.0,
+   "retiros": 64815.0,
+   "retiros_por_dia": 9259.29,
+   "wape": 19.11,
+   "wape_semana_anterior": 26.95,
+   "sesgo": 1.77
+  },
+  {
+   "semana": "2026-09-21",
+   "dias": 7.0,
+   "estaciones": 393.0,
+   "retiros": 62047.0,
+   "retiros_por_dia": 8863.86,
+   "wape": 21.5,
+   "wape_semana_anterior": 26.58,
+   "sesgo": 6.63
+  },
+  {
+   "semana": "2026-09-28",
+   "dias": 3.0,
+   "estaciones": 393.0,
+   "retiros": 30474.0,
+   "retiros_por_dia": 10158.0,
+   "wape": 20.21,
+   "wape_semana_anterior": 24.65,
+   "sesgo": 8.8
+  }
+ ]
+}

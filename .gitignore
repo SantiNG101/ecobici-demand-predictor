@@ -2,6 +2,9 @@
 data/interim/
 data/processed/
 data/processed.anterior/
+
+# Registro de pedidos de la API
+logs/
 datasets
 __MACOSX/
 *:Zone.Identifier
