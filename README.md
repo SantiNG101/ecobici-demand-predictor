@@ -39,12 +39,13 @@ Correrlos en orden, porque cada uno usa lo que genera el anterior.
 | [`02_eda_calidad`](notebooks/02_eda_calidad.ipynb) | Análisis exploratorio (tipos, faltantes, duplicados, outliers y gráficos), inventario de calidad y confiabilidad del target. | Sólo gráficos y tablas | 2 min |
 | [`03_transformaciones`](notebooks/03_transformaciones.ipynb) | Limpieza, integración, nuevas variables, codificación, partición, normalización y reflexión final. | `data/processed/dataset_estacion_hora.parquet` | 1 min |
 | [`04_modelado`](notebooks/04_modelado.ipynb) | Variables con rezago, baselines, regresión de Poisson, gradient boosting (búsqueda de hiperparámetros y validación cruzada temporal), evaluación en test, agrupamiento de estaciones, rebalanceo y ampliación, y persistencia. Incluye las respuestas a la devolución del segundo entregable: aporte de las variables de estado con buena cobertura de fotos, clima pronosticado y censura medida al inicio de la hora (lee también las fotos y los pronósticos crudos de `datasets/archive/`). | `models/` | 1 h 36 min con 16 GB de RAM (sin las secciones nuevas, 20 min en la Mac) |
+| [`05_evaluacion`](notebooks/05_evaluacion.ipynb) | Responde la devolución del tercer entregable con los modelos guardados, sin reentrenar: simulación del impacto operativo en el test (estaciones vacías o llenas evitadas contra la media histórica), error por grupo, zona y tipo de día, e interpretación con SHAP. Lee también `data/interim/viajes.parquet` y las fotos crudas. | Sólo gráficos y tablas | 3 min |
 
 Se pueden abrir con `jupyter lab` y ejecutar cada uno con *Run All*, o desde la terminal:
 
 ```bash
 cd notebooks
-jupyter nbconvert --to notebook --execute --inplace 01_adquisicion.ipynb 02_eda_calidad.ipynb 03_transformaciones.ipynb 04_modelado.ipynb
+jupyter nbconvert --to notebook --execute --inplace 01_adquisicion.ipynb 02_eda_calidad.ipynb 03_transformaciones.ipynb 04_modelado.ipynb 05_evaluacion.ipynb
 ```
 
 ## Modelos
