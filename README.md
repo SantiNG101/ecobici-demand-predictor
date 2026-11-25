@@ -98,7 +98,7 @@ terraform output                      # URLs y comandos para seguir el arranque 
 terraform destroy                     # borra todo, incluido el bucket
 ```
 
-Variables de entorno: `ECOBICI_MODELS_DIR` (por defecto `models`), `ECOBICI_PROCESSED_DIR` (por defecto `data/processed`, con `dataset_estacion_hora.parquet` y `estaciones.csv`), `ECOBICI_LOGS_DIR` (por defecto `logs`) y `ECOBICI_API_URL` para la interfaz (por defecto `http://localhost:8000`).
+Variables de entorno: `ECOBICI_MODELS_DIR` (por defecto `models`), `ECOBICI_PROCESSED_DIR` (por defecto `data/processed`, con `dataset_estacion_hora.parquet` y `estaciones.csv`), `ECOBICI_LOGS_DIR` (por defecto `logs`) y, para la interfaz, `ECOBICI_API_URL` (por defecto `http://localhost:8000`) y `ECOBICI_API_URL_PUBLICA`, la dirección de la API que se muestra en pantalla (por defecto la misma).
 
 ### Actualizar los datos
 

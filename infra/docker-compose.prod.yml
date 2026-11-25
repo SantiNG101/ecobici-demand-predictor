@@ -5,10 +5,14 @@ services:
   api:
     restart: unless-stopped
     ports: !reset []
+    # Dos procesos, uno por núcleo: un pedido lento no frena a los demás. Cada uno carga los modelos (~350 MB).
+    command: ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]
 
   interfaz:
     restart: unless-stopped
     ports: !reset []
+    environment:
+      ECOBICI_API_URL_PUBLICA: https://api.${DOMINIO}
 
   caddy:
     image: caddy:2.10
