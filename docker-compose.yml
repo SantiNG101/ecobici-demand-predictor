@@ -23,6 +23,7 @@ services:
       - "8501:8501"
     environment:
       ECOBICI_API_URL: http://api:8000
+      ECOBICI_API_URL_PUBLICA: http://localhost:8000  # la que se muestra: http://api:8000 sólo existe dentro de Docker
     depends_on:
       api:
         condition: service_healthy
