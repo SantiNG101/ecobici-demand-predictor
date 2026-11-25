@@ -50,9 +50,9 @@ jupyter nbconvert --to notebook --execute --inplace 01_adquisicion.ipynb 02_eda_
 
 ## Modelos
 
-El notebook 04 guarda en `models/` los modelos entrenados (`.joblib`), los grupos de estaciones y un `metadata.json` con las variables, los hiperparámetros, las métricas de test y la consulta SQL que arma las variables. La función `predecir_dia` del final del notebook muestra cómo cargarlos y predecir un día sin reentrenar.
+El notebook 04 guarda en `models/` los modelos entrenados (`.joblib`), los grupos de estaciones y un `metadata.json` con las variables, los hiperparámetros, las métricas de test y la consulta SQL que arma las variables. La función `predecir_dia` del final del notebook muestra cómo cargarlos y predecir un día sin reentrenar; la versión que usa el servicio es la de `src/ecobici/modelo.py` (ver Despliegue).
 
-Los `.joblib` de scikit-learn sólo se garantizan con la misma versión con la que se guardaron (está en `metadata.json`). Con otra versión, volver a correr el notebook 04.
+Los `.joblib` de scikit-learn sólo se garantizan con la misma versión con la que se guardaron (está en `metadata.json`). Con otra versión, volver a correr el notebook 04. `requirements-despliegue.txt` (y la imagen de Docker) fija esas mismas versiones: scikit-learn 1.9.1, pandas 2.3.3 y duckdb 2.0.0.
 
 Los tiempos de los notebooks 01 a 03 son de una corrida en una Mac con 24 GB de RAM. El notebook 02 carga las 21 M de fotos en memoria: se recomiendan al menos 16 GB. El 04 se corrió completo en una notebook con 16 GB de RAM, donde el sistema usa el disco como memoria y tarda bastante más.
 
@@ -88,7 +88,7 @@ Con Docker, la misma imagen corre los dos servicios y monta `models/` y `data/pr
 docker compose up --build
 ```
 
-En AWS, `infra/terraform/` levanta una EC2 (t3.small, Ubuntu 24.04) que clona el repositorio, baja `data/processed/` de un bucket S3 privado y corre el mismo compose con Caddy adelante (`infra/docker-compose.prod.yml`). Caddy saca los certificados de Let's Encrypt y publica `https://app.<ip>.sslip.io` (tablero) y `https://api.<ip>.sslip.io` (API). Sólo quedan abiertos los puertos 80 y 443, y el 22 desde la IP de quien corre terraform. Hace falta tener las credenciales de AWS configuradas y la rama pusheada:
+En AWS, `infra/terraform/` levanta una EC2 (t3.small, Ubuntu 24.04) que clona el repositorio, baja `data/processed/` de un bucket S3 privado y corre el mismo compose con Caddy adelante (`infra/docker-compose.prod.yml`). Caddy saca los certificados de Let's Encrypt y publica `https://app.<ip>.sslip.io` (tablero) y `https://api.<ip>.sslip.io` (API). Sólo quedan abiertos los puertos 80 y 443, y el 22 desde la IP de quien corre terraform. El bucket se llena con la carpeta `data/processed/` de quien corre terraform: para que el servidor muestre septiembre, antes hay que correr `scripts/actualizar_datos.py` en esa máquina. Hace falta tener las credenciales de AWS configuradas y la rama pusheada:
 
 ```bash
 cd infra/terraform
@@ -98,7 +98,7 @@ terraform output                      # URLs y comandos para seguir el arranque 
 terraform destroy                     # borra todo, incluido el bucket
 ```
 
-Variables de entorno: `ECOBICI_MODELS_DIR` (por defecto `models`), `ECOBICI_DATA_DIR` (por defecto `data/processed`, con `dataset_estacion_hora.parquet` y `estaciones.csv`), `ECOBICI_LOGS_DIR` (por defecto `logs`) y `ECOBICI_API_URL` para la interfaz (por defecto `http://localhost:8000`).
+Variables de entorno: `ECOBICI_MODELS_DIR` (por defecto `models`), `ECOBICI_PROCESSED_DIR` (por defecto `data/processed`, con `dataset_estacion_hora.parquet` y `estaciones.csv`), `ECOBICI_LOGS_DIR` (por defecto `logs`) y `ECOBICI_API_URL` para la interfaz (por defecto `http://localhost:8000`).
 
 ### Actualizar los datos
 
@@ -176,7 +176,7 @@ curl -X POST localhost:8000/prediccion/casos -H "content-type: application/json"
 - **Cambio en los datos (PSI):** cada mes contra los mismos meses del entrenamiento, para no confundirlo con la estacionalidad.
 - **Avisos** en los meses posteriores al test: si el error supera en más de 10 % al peor mes del test, si el total se aparta más de 10 %, o si no le gana a la semana anterior. Con avisos, el script termina con código 1.
 
-Con los datos hasta el 30/09/2026:
+`models/monitoreo.json` está calculado con los datos hasta el 30/09/2026. El dataset de `datasets.zip` termina el 31/08/2026: para tener septiembre en la API y en el tablero hay que correr antes `scripts/actualizar_datos.py`.
 
 | Mes | Error del modelo | Semana anterior | Sesgo |
 |---|---|---|---|
@@ -197,7 +197,7 @@ Levanta la API y el tablero, espera que respondan, verifica cada paso del recorr
 
 ### Decisiones y límites
 
-- **El dataset de la entrega termina el 31/08/2026**, así que el servicio predice días entre el 30/01/2024 y el 31/08/2026, o hasta donde lo extienda `scripts/actualizar_datos.py`. Cada día necesita sus 29 días previos. Como los días ya pasaron, la respuesta trae también lo que pasó, y el tablero muestra cuánto acertó el modelo.
+- **El dataset de la entrega termina el 31/08/2026**, así que el servicio predice días entre el 30/01/2024 y el 31/08/2026, o hasta donde lo extienda `scripts/actualizar_datos.py` (con los viajes publicados hoy, hasta el 30/09/2026). Cada día necesita sus 29 días previos. Como los días ya pasaron, la respuesta trae también lo que pasó, y el tablero muestra cuánto acertó el modelo.
 - **En producción** la grilla del día siguiente se armaría con las fotos en vivo del feed GBFS, los viajes del día anterior y el pronóstico del clima. La consulta SQL y los modelos no cambian. Hoy ese pronóstico se puede cargar a mano con `clima`.
 - **Las variables se arman con la misma consulta del entrenamiento**, leída de `metadata.json`. Se le pasa sólo el tramo del dataset que necesita (los 29 días previos y el día), lo que da las mismas variables y lleva una predicción de 24 s a menos de medio segundo.
 - **Las listas coinciden con el ejemplo de la sección 12.1** para la mañana del 02/06/2026. Los tests lo verifican. Una predicción o un rebalanceo tarda 0,4 s.

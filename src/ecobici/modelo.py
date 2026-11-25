@@ -17,7 +17,7 @@ import pandas as pd
 
 REPO_DIR = Path(__file__).resolve().parents[2]
 RUTA_MODELOS = REPO_DIR / os.environ.get("ECOBICI_MODELS_DIR", "models")
-RUTA_DATOS = REPO_DIR / os.environ.get("ECOBICI_DATA_DIR", "data/processed")
+RUTA_DATOS = REPO_DIR / os.environ.get("ECOBICI_PROCESSED_DIR", "data/processed")
 
 ARCHIVO_DATASET = "dataset_estacion_hora.parquet"
 ARCHIVO_PRECISION = "precision_rebalanceo.json"  # lo genera scripts/evaluar_rebalanceo.py; es opcional
@@ -138,7 +138,7 @@ def cargar(dir_modelos: Path = RUTA_MODELOS, dir_datos: Path = RUTA_DATOS) -> Pr
         raise FileNotFoundError(
             "Faltan archivos para cargar el modelo: " + ", ".join(faltantes)
             + ". Los modelos los genera el notebook 04 y el dataset el notebook 03 "
-            "(ver ECOBICI_MODELS_DIR y ECOBICI_DATA_DIR).")
+            "(ver ECOBICI_MODELS_DIR y ECOBICI_PROCESSED_DIR).")
 
     grupos = pd.read_csv(archivos["grupos"], index_col="station_id")[["grupo", "nombre_grupo"]]
     estaciones = pd.read_csv(archivos["estaciones"], index_col="station_id").join(grupos).sort_index()
@@ -176,9 +176,11 @@ def _variables(p: Predictor, fecha: date) -> pd.DataFrame:
     hasta = fecha + timedelta(days=1)
     with conexion() as con, tempfile.TemporaryDirectory() as carpeta:
         tramo = Path(carpeta) / ARCHIVO_DATASET
+        # El cast hace falta con DuckDB 2 (la columna es TIMESTAMPTZ_NS), como en la consulta de metadata.json
         con.execute(
             f"COPY (SELECT * FROM read_parquet('{p.dataset.as_posix()}') "
-            f"WHERE hora_local >= TIMESTAMPTZ '{desde}' AND hora_local < TIMESTAMPTZ '{hasta}') "
+            f"WHERE CAST(hora_local AS TIMESTAMPTZ) >= TIMESTAMPTZ '{desde}' "
+            f"AND CAST(hora_local AS TIMESTAMPTZ) < TIMESTAMPTZ '{hasta}') "
             f"TO '{tramo.as_posix()}' (FORMAT parquet)")
         consulta = p.meta["consulta_variables"].format(fuente=tramo.as_posix(), desde=desde)
         return con.execute(f"SELECT * FROM ({consulta}) WHERE ts >= ? AND ts < ?",

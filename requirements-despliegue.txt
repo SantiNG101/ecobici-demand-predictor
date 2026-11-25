@@ -1,7 +1,7 @@
 # API e interfaz (cuarto entregable). Versiones fijas: es lo que instala la imagen de Docker
 pandas==2.3.3
-numpy==2.5.3
-duckdb==1.5.6
+numpy==2.5.4
+duckdb==2.0.0  # la misma con la que se generaron los modelos (metadata.json)
 scikit-learn==1.9.1  # los .joblib de models/ sólo se garantizan con esta versión
 fastapi==0.165.0
 uvicorn==0.54.0

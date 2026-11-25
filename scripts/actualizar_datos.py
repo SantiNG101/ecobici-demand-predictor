@@ -152,7 +152,7 @@ def ultimo_dia_completo() -> tuple[date, datetime]:
     """Último día con viajes. Si el último viaje sale antes de las 23 h, el día se publicó a medias."""
     ruta = csv_viajes_mas_reciente()
     ultimo_viaje = duckdb.sql(f"SELECT max(TRY_CAST(fecha_origen_recorrido AS TIMESTAMP)) "
-                              f"FROM read_csv('{ruta.as_posix()}', header = true, all_varchar = true)").fetchone()[0]
+                              f"FROM read_csv('{ruta.as_posix()}', header = true, all_varchar = true)").fetchall()[0][0]
     dia = ultimo_viaje.date()
     return (dia if ultimo_viaje.hour == 23 else dia - timedelta(days=1)), ultimo_viaje
 
@@ -162,7 +162,7 @@ def resumen_dataset(ruta: Path) -> tuple[date, date, int] | None:
         return None
     return duckdb.sql(f"SELECT min(CAST(timezone('{ZONA}', hora_local) AS DATE)), "
                       f"max(CAST(timezone('{ZONA}', hora_local) AS DATE)), count(*) "
-                      f"FROM read_parquet('{ruta.as_posix()}')").fetchone()
+                      f"FROM read_parquet('{ruta.as_posix()}')").fetchall()[0]  # DuckDB 2 sacó fetchone() de las relaciones
 
 
 def hay_que_regenerar(fin: date, anterior, estado: dict) -> bool:
