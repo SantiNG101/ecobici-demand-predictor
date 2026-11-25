@@ -185,7 +185,7 @@ curl -X POST localhost:8000/prediccion/casos -H "content-type: application/json"
 
 Septiembre es el primer mes fuera del invierno: el error baja con el aumento de los viajes y queda cerca del de la validación cruzada (23,0 %). El cambio alto de las variables de estado en junio a agosto es porque los inviernos anteriores tienen huecos de fotos (35 a 65 % sin dato), no porque cambiara la red. El viento medido baja de forma sostenida desde diciembre de 2024 (unos 15 a 11 km/h de promedio): puede ser un cambio de la fuente y no se verificó.
 
-Los umbrales son una elección nuestra y son fáciles de cambiar en `src/ecobici/monitoreo.py`. El monitoreo usa clima observado, como el entrenamiento. Las rutas de monitoreo no piden contraseña: si la API se publica, conviene cerrarlas.
+Los umbrales son una elección nuestra y son fáciles de cambiar en `src/ecobici/monitoreo.py`. El monitoreo usa clima observado, como el entrenamiento. Las rutas de monitoreo no piden contraseña, así que en el despliegue en AWS Caddy no las publica (`/monitoreo*` responde 403 en `api.<dominio>`, ver `infra/Caddyfile`). La pestaña **Monitoreo** del tablero las sigue mostrando, porque llama a la API por la red interna de Docker.
 
 ### Demo
 

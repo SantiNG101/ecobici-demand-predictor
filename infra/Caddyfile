@@ -3,5 +3,8 @@ app.{$DOMINIO} {
 }
 
 api.{$DOMINIO} {
+	# El monitoreo no se publica: /monitoreo/servicio devuelve los últimos pedidos con su contenido.
+	# El tablero lo sigue mostrando porque llama a la API por la red interna (http://api:8000), no por acá.
+	respond /monitoreo* "No disponible" 403
 	reverse_proxy api:8000
 }
