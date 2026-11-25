@@ -88,7 +88,7 @@ Con Docker, la misma imagen corre los dos servicios y monta `models/` y `data/pr
 docker compose up --build
 ```
 
-En AWS, `infra/terraform/` levanta una EC2 (t3.small, Ubuntu 24.04) que clona el repositorio, baja `data/processed/` de un bucket S3 privado y corre el mismo compose con Caddy adelante (`infra/docker-compose.prod.yml`). Caddy saca los certificados de Let's Encrypt y publica `https://app.<ip>.sslip.io` (tablero) y `https://api.<ip>.sslip.io` (API). Sólo quedan abiertos los puertos 80 y 443, y el 22 desde la IP de quien corre terraform. El bucket se llena con la carpeta `data/processed/` de quien corre terraform: para que el servidor muestre septiembre, antes hay que correr `scripts/actualizar_datos.py` en esa máquina. Hace falta tener las credenciales de AWS configuradas y la rama pusheada:
+En AWS, `infra/terraform/` levanta una EC2 (c7i.large, Ubuntu 24.04) que clona el repositorio, baja `data/processed/` de un bucket S3 privado y corre el mismo compose con Caddy adelante (`infra/docker-compose.prod.yml`). Caddy saca los certificados de Let's Encrypt y publica `https://app.<ip>.sslip.io` (tablero) y `https://api.<ip>.sslip.io` (API). Sólo quedan abiertos los puertos 80 y 443, y el 22 desde la IP de quien corre terraform. El bucket se llena con la carpeta `data/processed/` de quien corre terraform: para que el servidor muestre septiembre, antes hay que correr `scripts/actualizar_datos.py` en esa máquina. Hace falta tener las credenciales de AWS configuradas y la rama pusheada:
 
 ```bash
 cd infra/terraform
