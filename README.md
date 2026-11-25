@@ -88,6 +88,16 @@ Con Docker, la misma imagen corre los dos servicios y monta `models/` y `data/pr
 docker compose up --build
 ```
 
+En AWS, `infra/terraform/` levanta una EC2 (t3.small, Ubuntu 24.04) que clona el repositorio, baja `data/processed/` de un bucket S3 privado y corre el mismo compose con Caddy adelante (`infra/docker-compose.prod.yml`). Caddy saca los certificados de Let's Encrypt y publica `https://app.<ip>.sslip.io` (tablero) y `https://api.<ip>.sslip.io` (API). Sólo quedan abiertos los puertos 80 y 443, y el 22 desde la IP de quien corre terraform. Hace falta tener las credenciales de AWS configuradas y la rama pusheada:
+
+```bash
+cd infra/terraform
+terraform init
+terraform apply -var rama=main        # el servidor tarda unos 5 minutos en quedar listo
+terraform output                      # URLs y comandos para seguir el arranque y actualizar
+terraform destroy                     # borra todo, incluido el bucket
+```
+
 Variables de entorno: `ECOBICI_MODELS_DIR` (por defecto `models`), `ECOBICI_DATA_DIR` (por defecto `data/processed`, con `dataset_estacion_hora.parquet` y `estaciones.csv`), `ECOBICI_LOGS_DIR` (por defecto `logs`) y `ECOBICI_API_URL` para la interfaz (por defecto `http://localhost:8000`).
 
 ### Actualizar los datos

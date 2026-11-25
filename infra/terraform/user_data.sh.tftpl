@@ -1,0 +1,24 @@
+#!/bin/bash
+# Corre una sola vez, en el primer arranque. Log: /var/log/cloud-init-output.log
+set -euxo pipefail
+export DEBIAN_FRONTEND=noninteractive
+
+# Swap: la imagen se construye en el servidor y pip con pandas/sklearn pide memoria
+fallocate -l 2G /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+echo '/swapfile none swap sw 0 0' >> /etc/fstab
+
+curl -fsSL https://get.docker.com | sh
+usermod -aG docker ubuntu
+snap install aws-cli --classic
+
+git clone --branch '${rama}' '${repositorio}' ${dir_servidor}
+mkdir -p ${dir_servidor}/data/processed ${dir_servidor}/logs
+/snap/bin/aws s3 cp --recursive --region '${region}' 's3://${bucket}/processed/' ${dir_servidor}/data/processed/
+echo 'DOMINIO=${dominio}' > ${dir_servidor}/.env
+chown -R ubuntu:ubuntu ${dir_servidor}
+
+cd ${dir_servidor}
+${compose} up -d --build

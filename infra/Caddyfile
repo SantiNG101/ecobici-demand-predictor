@@ -1,0 +1,7 @@
+app.{$DOMINIO} {
+	reverse_proxy interfaz:8501
+}
+
+api.{$DOMINIO} {
+	reverse_proxy api:8000
+}
