@@ -62,6 +62,13 @@ El 01 necesita conexión a internet para las APIs. Si la API de feriados no resp
 
 Caso de uso: el equipo de logística decide, antes de una franja pico, qué estaciones **abastecer** (se van a vaciar) y cuáles **descargar** (se van a llenar). Es la lista de la sección 12.1 del notebook 04, ahora servida por una API y un tablero.
 
+**En vivo** (AWS, cómo se levanta en [Cómo correrlo](#cómo-correrlo)):
+
+- Tablero: https://app.54-243-134-182.sslip.io
+- API: https://api.54-243-134-182.sslip.io (documentación en [`/docs`](https://api.54-243-134-182.sslip.io/docs)). Las rutas `/monitoreo` no se publican: se ven en la pestaña **Monitoreo** del tablero.
+
+El servidor estará levantado hasta la presentación final. Si se vuelve a crear con `terraform apply`, la IP y estas direcciones cambian.
+
 ```
 interfaz/app.py (Streamlit) --HTTP--> api/main.py (FastAPI) --> src/ecobici/modelo.py --> models/ + data/processed/
 ```
