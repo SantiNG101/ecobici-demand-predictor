@@ -5,9 +5,9 @@ variable "region" {
 }
 
 variable "tipo_instancia" {
-  description = "c7i.large: 2 núcleos dedicados y 4 GB. Con t3.small (2 GB, núcleos compartidos) una predicción sin caché tardaba ~4 s y se quedaba sin créditos de CPU; con 1 GB (t3.micro) no entra en memoria."
+  description = "Con 1 GB (t3.micro) la API y la interfaz se quedan sin memoria; t3.small tiene 2 GB."
   type        = string
-  default     = "c7i.large"
+  default     = "t3.small"
 }
 
 variable "repositorio" {
