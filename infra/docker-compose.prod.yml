@@ -19,7 +19,7 @@ services:
     environment:
       DOMINIO: ${DOMINIO:?falta DOMINIO en .env}
     volumes:
-      - ./infra/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./infra/caddy:/etc/caddy:ro  # carpeta, no archivo: git reemplaza el archivo y un montaje de archivo sigue viendo el viejo
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
