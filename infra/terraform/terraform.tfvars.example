@@ -1,0 +1,6 @@
+# Copiar a terraform.tfvars y ajustar. Todas tienen valor por defecto.
+# region            = "sa-east-1"
+# rama              = "despliegue-api-interfaz"
+# tipo_instancia    = "t3.small"
+# dominio           = "ecobici.example.com"
+# ssh_cidr          = "0.0.0.0/0"

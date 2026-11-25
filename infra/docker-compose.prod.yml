@@ -1,0 +1,31 @@
+# Se suma a docker-compose.yml en el servidor:
+#   docker compose -f docker-compose.yml -f infra/docker-compose.prod.yml up -d --build
+# Caddy sirve los dos servicios por HTTPS (certificados de Let's Encrypt) y son lo único expuesto.
+services:
+  api:
+    restart: unless-stopped
+    ports: !reset []
+
+  interfaz:
+    restart: unless-stopped
+    ports: !reset []
+
+  caddy:
+    image: caddy:2.10
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMINIO: ${DOMINIO:?falta DOMINIO en .env}
+    volumes:
+      - ./infra/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - api
+      - interfaz
+
+volumes:
+  caddy_data:
+  caddy_config:

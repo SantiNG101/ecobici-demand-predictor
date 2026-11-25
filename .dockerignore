@@ -1,0 +1,6 @@
+*
+!requirements-despliegue.txt
+!src/
+!api/
+!interfaz/
+**/__pycache__
