@@ -46,7 +46,8 @@ resource "aws_s3_object" "datos" {
   bucket = aws_s3_bucket.datos.id
   key    = "processed/${each.key}"
   source = "${local.dir_datos}/${each.key}"
-  etag   = filemd5("${local.dir_datos}/${each.key}")
+  # source_hash y no etag: el parquet sube en partes y su etag nunca es el MD5 del archivo
+  source_hash = filemd5("${local.dir_datos}/${each.key}")
 }
 
 # --- Permiso de la instancia para leer el bucket ---

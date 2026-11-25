@@ -20,8 +20,8 @@ output "ver_arranque" {
 }
 
 output "actualizar_codigo" {
-  description = "Trae la rama y reconstruye. Para datos nuevos: terraform apply y después actualizar_datos."
-  value       = "ssh ubuntu@${aws_eip.publica.public_ip} 'cd ${local.dir_servidor} && git pull && ${local.compose} up -d --build'"
+  description = "Trae la rama, reconstruye y recarga Caddy (no relee el Caddyfile solo). Para datos nuevos: terraform apply y después actualizar_datos."
+  value       = "ssh ubuntu@${aws_eip.publica.public_ip} 'cd ${local.dir_servidor} && git pull && ${local.compose} up -d --build && ${local.compose} exec -T caddy caddy reload --config /etc/caddy/Caddyfile'"
 }
 
 output "actualizar_datos" {

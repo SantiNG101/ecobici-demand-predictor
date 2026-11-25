@@ -5,10 +5,16 @@ services:
   api:
     restart: unless-stopped
     ports: !reset []
+    # Dos procesos, uno por núcleo: un pedido lento no frena a los demás. Cada uno carga los modelos (~250 MB).
+    # Con el chequeo de 5 s por defecto, uvicorn mataba a un proceso ocupado prediciendo y cortaba sus pedidos (502).
+    command: ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2",
+              "--timeout-worker-healthcheck", "60"]
 
   interfaz:
     restart: unless-stopped
     ports: !reset []
+    environment:
+      ECOBICI_API_URL_PUBLICA: https://api.${DOMINIO}
 
   caddy:
     image: caddy:2.10
@@ -19,7 +25,7 @@ services:
     environment:
       DOMINIO: ${DOMINIO:?falta DOMINIO en .env}
     volumes:
-      - ./infra/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./infra/caddy:/etc/caddy:ro  # carpeta, no archivo: git reemplaza el archivo y un montaje de archivo sigue viendo el viejo
       - caddy_data:/data
       - caddy_config:/config
     depends_on:

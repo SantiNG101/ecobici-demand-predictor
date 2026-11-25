@@ -21,7 +21,7 @@ Si los viajes de algún año vienen como `recorridos-realizados-AAAA.zip`, no ha
 
 ## Instalación
 
-Con Python 3.11 a 3.13:
+Con Python 3.12 o 3.13:
 
 ```bash
 python -m venv .venv
@@ -98,7 +98,7 @@ terraform output                      # URLs y comandos para seguir el arranque 
 terraform destroy                     # borra todo, incluido el bucket
 ```
 
-Variables de entorno: `ECOBICI_MODELS_DIR` (por defecto `models`), `ECOBICI_PROCESSED_DIR` (por defecto `data/processed`, con `dataset_estacion_hora.parquet` y `estaciones.csv`), `ECOBICI_LOGS_DIR` (por defecto `logs`) y `ECOBICI_API_URL` para la interfaz (por defecto `http://localhost:8000`).
+Variables de entorno: `ECOBICI_MODELS_DIR` (por defecto `models`), `ECOBICI_PROCESSED_DIR` (por defecto `data/processed`, con `dataset_estacion_hora.parquet` y `estaciones.csv`), `ECOBICI_LOGS_DIR` (por defecto `logs`) y, para la interfaz, `ECOBICI_API_URL` (por defecto `http://localhost:8000`) y `ECOBICI_API_URL_PUBLICA`, la dirección de la API que se muestra en pantalla (por defecto la misma).
 
 ### Actualizar los datos
 
@@ -185,7 +185,7 @@ curl -X POST localhost:8000/prediccion/casos -H "content-type: application/json"
 
 Septiembre es el primer mes fuera del invierno: el error baja con el aumento de los viajes y queda cerca del de la validación cruzada (23,0 %). El cambio alto de las variables de estado en junio a agosto es porque los inviernos anteriores tienen huecos de fotos (35 a 65 % sin dato), no porque cambiara la red. El viento medido baja de forma sostenida desde diciembre de 2024 (unos 15 a 11 km/h de promedio): puede ser un cambio de la fuente y no se verificó.
 
-Los umbrales son una elección nuestra y son fáciles de cambiar en `src/ecobici/monitoreo.py`. El monitoreo usa clima observado, como el entrenamiento. Las rutas de monitoreo no piden contraseña, así que en el despliegue en AWS Caddy no las publica (`/monitoreo*` responde 403 en `api.<dominio>`, ver `infra/Caddyfile`). La pestaña **Monitoreo** del tablero las sigue mostrando, porque llama a la API por la red interna de Docker.
+Los umbrales son una elección nuestra y son fáciles de cambiar en `src/ecobici/monitoreo.py`. El monitoreo usa clima observado, como el entrenamiento. Las rutas de monitoreo no piden contraseña, así que en el despliegue en AWS Caddy no las publica (`/monitoreo*` responde 403 en `api.<dominio>`, ver `infra/caddy/Caddyfile`). La pestaña **Monitoreo** del tablero las sigue mostrando, porque llama a la API por la red interna de Docker.
 
 ### Demo
 

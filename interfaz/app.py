@@ -8,6 +8,8 @@ import requests
 import streamlit as st
 
 API = os.environ.get("ECOBICI_API_URL", "http://localhost:8000").rstrip("/")
+# La que se le muestra al usuario: en Docker, API es una dirección interna (http://api:8000)
+API_PUBLICA = os.environ.get("ECOBICI_API_URL_PUBLICA", API).rstrip("/")
 FRANJAS = {"manana": "Mañana (6 a 9 h)", "tarde": "Tarde (16 a 19 h)"}
 COLOR_ABASTECER = [227, 73, 72]   # se vacía
 COLOR_DESCARGAR = [42, 120, 214]  # se llena
@@ -306,7 +308,7 @@ with st.sidebar:
         clima = {"temperatura_c": st.slider("Temperatura (°C)", -5.0, 40.0, 15.0, 0.5),
                  "precipitacion_mm": st.slider("Lluvia por hora (mm)", 0.0, 20.0, 0.0, 0.5),
                  "viento_kmh": st.slider("Viento (km/h)", 0.0, 80.0, 15.0, 1.0)}
-    st.caption(f"Datos del {fecha_minima:%d/%m/%Y} al {fecha_maxima:%d/%m/%Y}. API: {API}")
+    st.caption(f"Datos del {fecha_minima:%d/%m/%Y} al {fecha_maxima:%d/%m/%Y}. API: {API_PUBLICA}")
 
 planificar, datos_nuevos, monitoreo = st.tabs(["Planificar el rebalanceo", "Probar con datos nuevos", "Monitoreo"])
 with planificar:
