@@ -21,7 +21,7 @@ Si los viajes de algún año vienen como `recorridos-realizados-AAAA.zip`, no ha
 
 ## Instalación
 
-Con Python 3.11 a 3.13:
+Con Python 3.12 o 3.13:
 
 ```bash
 python -m venv .venv

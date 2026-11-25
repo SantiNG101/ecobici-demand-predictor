@@ -3,7 +3,7 @@ name = "ecobici-demand-predictor"
 version = "0.1.0"
 description = "Modelo predictivo de demanda de Ecobici (CABA): adquisición, EDA, transformaciones, modelado y despliegue"
 readme = "README.md"
-requires-python = ">=3.11,<3.14"
+requires-python = ">=3.12,<3.14"  # shap 0.54.1 (la 0.54.0 fue retirada) pide 3.12
 dependencies = [
     # Datos (los cuatro notebooks). pandas fijado: es la versión con la que se ejecutaron los notebooks
     "pandas==2.3.3",
