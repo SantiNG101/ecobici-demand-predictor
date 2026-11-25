@@ -5,8 +5,10 @@ services:
   api:
     restart: unless-stopped
     ports: !reset []
-    # Dos procesos, uno por núcleo: un pedido lento no frena a los demás. Cada uno carga los modelos (~350 MB).
-    command: ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]
+    # Dos procesos, uno por núcleo: un pedido lento no frena a los demás. Cada uno carga los modelos (~250 MB).
+    # Con el chequeo de 5 s por defecto, uvicorn mataba a un proceso ocupado prediciendo y cortaba sus pedidos (502).
+    command: ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2",
+              "--timeout-worker-healthcheck", "60"]
 
   interfaz:
     restart: unless-stopped

@@ -5,6 +5,7 @@ Sin dependencias de la capa de servicio: la API y los tests usan estas funciones
 import json
 import os
 import tempfile
+import threading
 from dataclasses import asdict, dataclass, fields
 from datetime import date, timedelta
 from enum import StrEnum
@@ -170,9 +171,16 @@ def cargar(dir_modelos: Path = RUTA_MODELOS, dir_datos: Path = RUTA_DATOS) -> Pr
     )
 
 
+_un_dia_a_la_vez = threading.Lock()
+
+
 def _variables(p: Predictor, fecha: date) -> pd.DataFrame:
+    # De a un día por proceso: los pedidos simultáneos del mismo día esperan una sola consulta en vez de
+    # repetirla, y con dos núcleos varias consultas a la vez sólo se pisan.
+    with _un_dia_a_la_vez:
+        datos = _variables_guardadas(p.dataset, p.meta["consulta_variables"], fecha)
     # Copia: quien llama agrega columnas y no tiene que tocar lo guardado
-    return _variables_guardadas(p.dataset, p.meta["consulta_variables"], fecha).copy()
+    return datos.copy()
 
 
 # En el servidor la consulta tarda ~3 s de los ~4 s de una predicción y es la misma para cualquier clima,
